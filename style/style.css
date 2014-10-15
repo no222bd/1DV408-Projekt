@@ -1,0 +1,69 @@
+body {
+	margin: 0 auto;
+	width: 800px;
+	text-align: center;
+	font-family: "Ubuntu", sans-serif;
+	color:#555;
+	b ackground-color: whitesmoke;
+
+/* IE10 Consumer Preview */ 
+background-image: -ms-radial-gradient(center top, circle farthest-corner, #FFFFFF 0%, #E0E0E0 100%);
+
+/* Mozilla Firefox */ 
+background-image: -moz-radial-gradient(center top, circle farthest-corner, #FFFFFF 0%, #E0E0E0 100%);
+
+/* Opera */ 
+background-image: -o-radial-gradient(center top, circle farthest-corner, #FFFFFF 0%, #E0E0E0 100%);
+
+/* Webkit (Safari/Chrome 10) */ 
+background-image: -webkit-gradient(radial, center top, 0, center top, 561, color-stop(0, #FFFFFF), color-stop(1, #E0E0E0));
+
+/* Webkit (Chrome 11+) */ 
+background-image: -webkit-radial-gradient(center top, circle farthest-corner, #FFFFFF 0%, #E0E0E0 100%);
+
+/* W3C Markup, IE10 Release Preview */ 
+background-image: radial-gradient(circle farthest-corner at center top, #FFFFFF 0%, #E0E0E0 100%);
+}
+
+h1 {
+	font-size: 5em;
+}
+
+h2 {
+	font-size: 2em;
+}
+
+h3 {
+	font-size: 1.5em;
+}
+
+#questionBox {
+	border: 4px solid #999;
+	border-radius: 30px;
+	box-shadow: 0 0 25px #aaa;
+	background-color: white;
+	min-height: 500px;
+	padding: 25px;
+}
+
+input[type="radio"] {
+	dis play: none;
+}
+
+input[type="submit"] {
+	disp lay: inline-block;
+}
+
+form {
+	font-size: 1.5em;
+}
+
+label {
+	display: block;
+}
+
+img {
+	border-radius: 20px;
+	max-width: 740px;
+	margin: 25px 0;
+}
