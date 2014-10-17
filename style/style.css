@@ -27,6 +27,8 @@ background-image: radial-gradient(circle farthest-corner at center top, #FFFFFF 
 
 h1 {
 	font-size: 5em;
+	text-shadow: 0px 0px 15px #aaa;
+	margin: 35px 0;
 }
 
 h2 {
@@ -66,4 +68,46 @@ img {
 	border-radius: 20px;
 	max-width: 740px;
 	margin: 25px 0;
+}
+
+
+
+#loginBox h3 {
+	font-we ight: bold;
+}
+
+fieldset {
+	margin: 0 auto;
+	width: 500px;
+	bor der: 4px solid #999;
+	border-radius: 10px;
+	box-shadow: 0 0 25px #aaa;
+	bac kground-color: white;
+	min-hei ght: 500px;
+	pad ding: 10px;
+}
+
+#authentication label{
+wid th: 300px;
+text -align: right;
+font-size: 0.8em;
+
+}
+
+#authentication input[type="text"], #authentication input[type="password"]{
+width: 300px;
+tex t-align: right;
+font-siz e: 0.8em;
+
+}
+
+#authentication input[type="checkbox"] {
+wid th: 300px;
+tex t-align: right;
+font-siz e: 0.8em;
+
+}
+
+.message {
+	color: orange;
 }

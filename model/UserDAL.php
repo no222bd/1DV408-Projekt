@@ -13,6 +13,51 @@ class UserDAL extends \model\SuperDAL {
 	private static $passwordField = 'password';
 	private static $userTypeIdField = 'userTypeId';
 
+
+
+	public function getUserById($userId) {
+
+		$this->connectToDB();
+
+		$sql = 'SELECT *
+				FROM ' . self::$tableName . '
+				WHERE ' . self::$userIdField . ' = :user_Id';
+
+		$stmt = $this->dbConnection->prepare($sql);
+	
+		$stmt->execute(array('user_Id' => $userId));
+
+		$result = $stmt->fetch();
+		
+		$user = new \model\User($result[self::$usernameField], $result[self::$passwordField]);
+		$user->setUserId($result[self::$userIdField]);
+		$user->setUserType($result[self::$userTypeIdField]);
+
+		return $user;
+	}
+
+	public function getUsers() {
+		
+		$this->connectToDB();
+
+		$sql = 'SELECT *
+				FROM ' . self::$tableName;
+
+		$stmt = $this->dbConnection->query($sql);
+	
+		$users = array();
+
+		while($row = $stmt->fetch()) {
+			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField]);
+			$user->setUserId($row[self::$userIdField]);
+			$user->setUserType($row[self::$userTypeIdField]);
+
+			$users[] = $user;
+		}
+
+		return $users;
+	}
+
 	public function getArrayOfUsernames() {
 		
 		$this->connectToDB();

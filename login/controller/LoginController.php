@@ -84,7 +84,11 @@ class LoginController {
 	private function getHTML() {
 		if($this->loginModel->isLoggedIn()) {
 
-			$router = new \controller\QuizzyMaster();
+			//var_dump($this->loginModel->getLoggedInUser()); die();
+
+
+			$router = new \controller\QuizzyMaster($this->loginModel->getLoggedInUser());
+			
 			return $router->doRoute();
 
 			//return $this->loginView->getLogoutHTML();

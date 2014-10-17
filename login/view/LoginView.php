@@ -83,31 +83,31 @@ class LoginView {
 	public function getLoginHTML() {
 		$output = '
 			<h2>Frågesport für alle!</h2>											
-			<form action="' . $_SERVER['PHP_SELF'] .' " method="post">
+			<form id="authentication" action="' . $_SERVER['PHP_SELF'] .' " method="post">
 				<fieldset>
-					<legend>Login</legend>';
+					<!--legend>Login</legend-->';
 
 		if($this->message->hasMessage())
-			$output .= '<p>' . $this->message->getMessage() . '</p>';				
+			$output .= '<p class="message">' . $this->message->getMessage() . '</p>';				
 
 		$output .= '
-					<label>Användarnamn
+					<label>Användarnamn</label>
 						<input type="text" name="' . self::$usernameLocation . '"';
 
 		if(isset($_POST[self::$usernameLocation]))
 			$output .= ' value="' . $_POST[self::$usernameLocation] . '"';
 
 		$output .= '/>
-					</label>
 					
-					<label>Lösenord
+					
+					<label>Lösenord</label>
 						<input type="password" name="' . self::$passwordLocation . '"/>
-					</label>
+					
 
-					<label>
+					<label>Håll mig inloggad</label>
 						<input type="checkbox" name="' . self::$rememberMeLocation . '"/>
-						Håll mig inloggad
-					</label>
+						
+					
 			
 					<input type="submit" name="' . self::$loginLocation . '" value="Logga in"/>
 				</fieldset>

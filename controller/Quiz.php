@@ -56,6 +56,15 @@ class Quiz {
 			$question = $this->view->getQuestion();
 			$answers = $this->view->getAnswers();
 
+			// Kolla om fil har lagts till
+			if($this->view->hasFileUpload()) {
+
+				$this->view->handleFile($this->session->getCreatedQuizId());
+
+
+
+			}
+
 			// Skapa och lägg till Question i DB
 			$questionObject = new \model\Question($question, $answers);
 			$questionDAL = new \model\QuestionDAL();

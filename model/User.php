@@ -39,4 +39,12 @@ class User {
 	public function getUserType() {
 		return $this->password;
 	}
+
+	public function setUserId($userId) {
+		$this->userId = $userId;
+	}
+
+	public function setUserType($userType) {
+		$this->userType = $userType;
+	}
 }

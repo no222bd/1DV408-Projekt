@@ -50,13 +50,13 @@ class Register {
 	public function getRegisterHTML() {
 		
 		$html = '<h2>Registrera användare</h2>
-				<p><a href="' . \Settings::$ROOT_PATH . '">Tillbaka</a></p>											<!-- STRÄNGBEROENDE!!! -->
-				<form action="' . $_SERVER['PHP_SELF'] . '?register" method="post">		<!-- STRÄNGBEROENDE!!! -->
+				
+				<form id="authentication" action="' . $_SERVER['PHP_SELF'] . '?register" method="post">		<!-- STRÄNGBEROENDE!!! -->
 					<fieldset>
-						<legend>Registrera ny användare</legend>';
+						<!--legend>Registrera ny användare</legend-->';
 		
 		if(isset($this->message))
-			$html .= '<p>' . $this->message . '</p>';
+			$html .= '<p class="message">' . $this->message . '</p>';
 		
 		$html .= '<label>Namn
 					 	<input type="text" name="' . self::$username . '"';
@@ -75,7 +75,8 @@ class Register {
 					</label><br/>
 					<input type="submit" name="' . self::$registerButton . '" value="Registrera"/>
 				</fieldset>
-			</form>';
+			</form>
+			<p><a href="' . \Settings::$ROOT_PATH . '">Tillbaka</a></p>											<!-- STRÄNGBEROENDE!!! -->';
 		
 		return $html;
 	}

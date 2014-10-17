@@ -42,6 +42,19 @@ class Quiz {
 
 	// Create Quiz ====================================================================================================
 
+	public function hasFileUpload() {
+		return !empty($_FILES['imageFile']);
+	}
+
+	public function handleFile($quizId) {
+
+		$target_path = 'media/images/';
+
+		$target_path = $target_path . basename( $_FILES['imageFile']['name']); 
+
+		move_uploaded_file($_FILES['imageFile']['tmp_name'], $target_path);
+	}
+
 	public function getQuizTitle() {
 		if(isset($_POST['quizTitle']))
 			return $_POST['quizTitle'];
@@ -85,13 +98,17 @@ class Quiz {
 	public function getQuestionFormHTML($questionNumber) {
 
 		$html = '<h2>Skapa fråga ' . $questionNumber . '</h2>
-				<form method="POST">
+				<form method="POST" enctype="multipart/form-data">
 					<label> Ange fråga
 						<input type="text" name="question" required />
 					</label>
 					<label> Ange svar
 						<input type="text" name="answer1" required />
 					</label>
+					<hr>
+
+					<input type="file" name="imageFile"><br>
+
 					<hr>
 					<p>Om flervalsfråga önskas, fyll i alla nedanstående</p>
 					<label> Ange svarsalternativ 1
@@ -118,7 +135,7 @@ class Quiz {
 		$html = '<h2>Tillgängliga Quiz</h2>';
 
 		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?doQuiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+			$html .= '<p><a href="?' . \view\QuizzyMaster::$PATH_DO .  '=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
 		}
 
 		return $html;
