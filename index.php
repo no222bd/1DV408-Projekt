@@ -5,13 +5,18 @@ require_once('view/HTML5Base.php');
 
 session_start();
 
-$login = new \login\controller\AuthenticationRouter();
+// $login = new \login\controller\AuthenticationRouter();
+
+// $html = new \view\Html5Base();
+
+// $html->getHTML($login->authenticationRouter());
+
+
+$router = new \controller\QuizzyMaster();
 
 $html = new \view\Html5Base();
 
-$html->getHTML($login->authenticationRouter());
-
-
+$html->getHTML($router->doRoute());
 
 // <?php
 

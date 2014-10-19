@@ -7,11 +7,12 @@ class User {
 	private $userId;
 	private $username;
 	private $password;
-	private $userType;
+	private $isAdmin;
 
-	public function __construct($username, $password) {
+	public function __construct($username, $password, $isAdmin = false) {
 		$this->username = $username;
 		$this->password = $password;
+		$this->isAdmin = $isAdmin;
 	}
 
 	public function equals(\model\User $otherUser) {
@@ -36,15 +37,23 @@ class User {
 		return $this->password;
 	}
 
-	public function getUserType() {
-		return $this->password;
+	public function getIsAdmin() {
+		if($this->isAdmin == 1)
+			return true;
+		else
+			return false;
 	}
 
 	public function setUserId($userId) {
 		$this->userId = $userId;
 	}
 
-	public function setUserType($userType) {
-		$this->userType = $userType;
+	public function setIsAdmin($isAdmin) {
+		$this->isAdmin = $isAdmin;
+	}
+
+	// Hitta och byr till ovan getIsAdmin
+	public function isAdministrator() {
+		return $this->isAdmin;
 	}
 }

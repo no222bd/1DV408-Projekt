@@ -14,9 +14,9 @@ class Question {
 		
 		$html .= '<form method="POST">';
 
-		if($question->isTextQuestion()) {
-			$html .= '<input type="text" name="answer" required />';
-		} else {
+		// if($question->isTextQuestion()) {
+		// 	$html .= '<input type="text" name="answer" required />';
+		// } else {
 			$answers = $question->getAnswers();
 			shuffle($answers);
 
@@ -25,7 +25,7 @@ class Question {
 							. '<input type="radio" name="answer" value="' . $answer . '" required />'
 							. $answer . '</label>';
 			}
-		}
+		//}
 
 		$html .= '<input type="submit" value="Svara"/>
 				  </form>';

@@ -6,11 +6,21 @@ require_once('\view\Question.php');
 
 class Quiz {
 
+	public function getQuizId() {
+		return $_GET[\view\QuizzyMaster::$QUIZ_ID];
+	}
+
+	public function getUserId() {
+		return $_GET[\view\QuizzyMaster::$USER_ID];
+	}
+
+
 	// Do Quiz ====================================================================================================
 	
-	public function getQuizId() {
-		return $_GET['doQuiz'];
-	}
+	// public function getQuizId() {
+	// 	return $_GET[\view\QuizzyMaster::$PATH_DO];
+	// }
+
 
 	public function isPostBack() {
 		return $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['answer']);
@@ -68,14 +78,19 @@ class Quiz {
 	public function getAnswers() {
 		$answers = array();
 
-		if(empty($_POST['answer4'])) {
-			$answers[] = $_POST['answer1'];
-		} else {
-			$answers[] = $_POST['answer1'];
-			$answers[] = $_POST['answer2'];
-			$answers[] = $_POST['answer3'];
-			$answers[] = $_POST['answer4'];
-		}
+		$answers[] = $_POST['answer1'];
+		$answers[] = $_POST['answer2'];
+		$answers[] = $_POST['answer3'];
+		$answers[] = $_POST['answer4'];
+
+		// if(empty($_POST['answer4'])) {
+		// 	$answers[] = $_POST['answer1'];
+		// } else {
+		// 	$answers[] = $_POST['answer1'];
+		// 	$answers[] = $_POST['answer2'];
+		// 	$answers[] = $_POST['answer3'];
+		// 	$answers[] = $_POST['answer4'];
+		// }
 
 		return $answers;
 	}
@@ -105,12 +120,12 @@ class Quiz {
 					<label> Ange svar
 						<input type="text" name="answer1" required />
 					</label>
-					<hr>
+					<!--hr>
 
 					<input type="file" name="imageFile"><br>
 
 					<hr>
-					<p>Om flervalsfråga önskas, fyll i alla nedanstående</p>
+					<p>Om flervalsfråga önskas, fyll i alla nedanstående</p-->
 					<label> Ange svarsalternativ 1
 						<input type="text" name="answer2" />
 					</label>
@@ -135,10 +150,59 @@ class Quiz {
 		$html = '<h2>Tillgängliga Quiz</h2>';
 
 		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?' . \view\QuizzyMaster::$PATH_DO .  '=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
 		}
 
 		return $html;
 	}
 
+	// List Avalible Quizes ====================================================================================================
+	
+	public function getAvalibleQuizListHTML($quizes) {
+
+		$html = '<h2>Nya Tillgängliga Quiz</h2>';
+
+		foreach ($quizes as $quiz) {
+			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+		}
+
+		return $html;
+	}
+
+	// List Done Quizes ====================================================================================================
+
+	public function getDoneQuizListHTML($quizes) {
+
+		$html = '<h2>Gjorda Quiz</h2>';
+
+		foreach ($quizes as $quiz) {
+			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_SHOW_RESULT .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+		}
+
+		return $html;
+	}
+
+	
+	// Quiz result html ====================================================================================================
+	// PARAMETERTEST
+	public function getQuizResultHTML($quiz, $userAnswers) {
+
+		$html = '<h2>Single quiz result</h2>
+				 <h3>' .  $quiz->getQuizName() . '</h3>
+				 <hr>';
+
+		foreach ($quiz->getQuestions() as $question) {
+			
+			$html .= '<h3>' . $question->getQuestion() . '</h3>';
+
+			$html .= '<p>Rätt svar: ' . $question->getCorrectAnswer() . '</p>
+					  <p>Ditt svar: ' . $userAnswers[$question->getQuestionId()] . '</p><hr>';		
+
+
+
+
+		}
+
+		return $html;
+	}
 }

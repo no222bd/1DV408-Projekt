@@ -11,9 +11,34 @@ class UserDAL extends \model\SuperDAL {
 	private static $userIdField = 'userId';
 	private static $usernameField = 'username';
 	private static $passwordField = 'password';
-	private static $userTypeIdField = 'userTypeId';
+	private static $isAdminField = 'isAdmin';
+
+	public function makeAdminById($userId) {
+
+		$this->connectToDB();
+
+		$sql = 'UPDATE ' . self::$tableName . '
+				SET ' . self::$isAdminField . '= TRUE
+				WHERE ' . self::$userIdField . '= :user_Id';
+		
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array('user_Id' => $userId));
+	}
 
 
+	public function deleteUserById($userId) {
+
+		$this->connectToDB();
+
+		$sql = 'DELETE 
+				FROM ' . self::$tableName . '
+				WHERE ' . self::$userIdField . '= :user_Id';
+		
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array('user_Id' => $userId));
+	}
 
 	public function getUserById($userId) {
 
@@ -29,9 +54,9 @@ class UserDAL extends \model\SuperDAL {
 
 		$result = $stmt->fetch();
 		
-		$user = new \model\User($result[self::$usernameField], $result[self::$passwordField]);
+		$user = new \model\User($result[self::$usernameField], $result[self::$passwordField], $result[self::$isAdminField]);
 		$user->setUserId($result[self::$userIdField]);
-		$user->setUserType($result[self::$userTypeIdField]);
+		//$user->setUserType();
 
 		return $user;
 	}
@@ -48,9 +73,36 @@ class UserDAL extends \model\SuperDAL {
 		$users = array();
 
 		while($row = $stmt->fetch()) {
-			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField]);
+			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
 			$user->setUserId($row[self::$userIdField]);
-			$user->setUserType($row[self::$userTypeIdField]);
+			//$user->setUserType($row[self::$userTypeIdField]);
+
+			$users[] = $user;
+		}
+
+		return $users;
+	}
+
+	public function getUsersOnly() {
+		
+		$this->connectToDB();
+
+		$sql = 'SELECT *
+				FROM ' . self::$tableName . '
+				WHERE ' . self::$isAdminField . '= :is_Admin'; 
+
+		$stmt = $this->dbConnection->prepare($sql);
+	
+		$stmt->execute(array(
+				'is_Admin' => 'FALSE')
+			);
+
+		$users = array();
+
+		while($row = $stmt->fetch()) {
+			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
+			$user->setUserId($row[self::$userIdField]);
+			//$user->setUserType($row[self::$userTypeIdField]);
 
 			$users[] = $user;
 		}
@@ -100,14 +152,15 @@ class UserDAL extends \model\SuperDAL {
 
 		$this->connectToDB();
 		
-		$sql = 'INSERT INTO ' . self::$tableName . ' (' . self::$usernameField . ', ' . self::$passwordField . ') 
-				VALUES (:username, :password)';
+		$sql = 'INSERT INTO ' . self::$tableName . ' (' . self::$usernameField . ', ' . self::$passwordField . ', ' . self::$isAdminField . ') 
+				VALUES (:username, :password, :is_Admin)';
 
 		$stmt = $this->dbConnection->prepare($sql);
 	
 		$stmt->execute(array(
 				'username' => $user->getUsername(),
-				'password' => $user->getPassword())
+				'password' => $user->getPassword(), 
+				'is_Admin' => $user->getIsAdmin())
 			);
 	}
 }

@@ -6,23 +6,14 @@ require_once('model/SuperDAL.php');
 
 class QuestionDAL extends \model\SuperDAL {
 
-	// Question table properties
-	private static $question_tableName = 'question';
-	private static $question_idField = 'questionId';
-	private static $question_quizIdField = 'quizId';
-	private static $question_questionField = 'question';
 
-	// Answer table properties
-	private static $answer_tableName = 'answer';
-	private static $answer_idField = 'answerId';
-	private static $answer_questionIdField = 'questionId';
-	private static $answer_answerField = 'answer';
-	private static $answer_isCorrectField = 'isCorrect';
 
-	// MediaPath table properties
-	private static $mediaPath_tableName = 'mediapath';
-	private static $mediaPath_questionIdField = 'questionId';
-	private static $mediaPath_path = 'path';
+	
+
+
+
+
+	
 
 	public function populateQuizObject($quiz) {
 

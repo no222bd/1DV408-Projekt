@@ -51,7 +51,7 @@ class Register {
 		
 		$html = '<h2>Registrera användare</h2>
 				
-				<form id="authentication" action="' . $_SERVER['PHP_SELF'] . '?register" method="post">		<!-- STRÄNGBEROENDE!!! -->
+				<form id="authentication" action="' . $_SERVER['PHP_SELF'] . '?action=register" method="post">		<!-- STRÄNGBEROENDE!!! -->
 					<fieldset>
 						<!--legend>Registrera ny användare</legend-->';
 		

@@ -112,7 +112,7 @@ class LoginView {
 					<input type="submit" name="' . self::$loginLocation . '" value="Logga in"/>
 				</fieldset>
 			</form>
-			<p><a href="?register">Registrera</a></p>';
+			<p><a href="?action=register">Registrera</a></p>';
 		
 		return $output;
 	}

@@ -9,50 +9,102 @@ require_once('model/QuestionDAL.php');
 
 class QuizDAL extends \model\SuperDAL {
 
-	// Quiz table properties
-	private static $tableName = 'quiz';
-	private static $idField = 'quizId';
-	private static $nameField = 'name';
+	public function getUserAnswersArray($userId, $quizId) {
 
-	// public function getEmptyQuiz($quizId) {
+		$this->connectToDB();
 
-	// 	$this->connectToDB();
+		$sql = 'SELECT ' . self::$answer_questionIdField . ', ' . self::$answer_answerField . '
+				FROM ' . self::$answer_tableName . ' 
+				INNER JOIN ' . self::$userAnswer_tableName . ' 
+					ON ' . self::$answer_tableName . '.' . self::$answer_idField . '=' . self::$userAnswer_tableName . '.' . self::$userAnswer_answerIdField . ' 
+				INNER JOIN ' . self::$done_tableName . ' 
+					ON ' . self::$done_tableName . '.' . self::$done_doneQuizIdField . '=' . self::$userAnswer_tableName . '.' . self::$userAnswer_doneQuizIdField . '
+				WHERE ' . self::$done_userIdField . '=:user_Id AND ' . self::$done_quizIdField . '=:quiz_Id';
 
-	// 	$sql = 'SELECT *
-	// 			FROM ' . self::$tableName . '
-	// 			WHERE ' . self::$idField . ' = :quiz_Id';
+		$stmt = $this->dbConnection->prepare($sql);
 
-	// 	$stmt = $this->dbConnection->prepare($sql);
+		$stmt->execute(array('user_Id' => $userId,
+							 'quiz_Id' => $quizId)
+		);
 	
-	// 	$stmt->execute(array('quiz_Id' => $quizId));
+		$answersArray = array();
 
-	// 	$result = $stmt->fetch();
+		while($row = $stmt->fetch()) {
+			$answersArray[$row[self::$answer_questionIdField]] = $row[self::$answer_answerField]; 
+		}
+
+		return $answersArray;
+	}
+
+
+
+	public function getEmptyDoneQuizes($userId) {
+
+		$this->connectToDB();
 		
-	// 	// Skapar Quiz med titel och id
-	// 	$quiz = new \model\Quiz($result[self::$nameField]);
-	// 	$quiz->setQuizId($result[self::$idField]);
+		$sql = 'SELECT ' . self::$quiz_tableName . '.' . self::$quiz_idField . ', ' . self::$quiz_creatorIdField . ', ' . self::$quiz_nameField . ', ' . self::$quiz_isActiveField . '
+				FROM ' . self::$quiz_tableName . '
+				INNER JOIN ' . self::$done_tableName . '
+				ON ' . self::$done_tableName . '.' . self::$done_quizIdField . '=' . self::$quiz_tableName . '.' . self::$quiz_idField . '
+				WHERE ' . self::$done_userIdField . '=:user_Id';
 
-	// 	// Populerar Quiz med Questions
-	// 	$questionDAL = new \model\QuestionDAL();
-	// 	$questionDAL->populateQuizObject($quiz);
+		$stmt = $this->dbConnection->prepare($sql);
 
-	// 	return $quiz;
-	// }
+		$stmt->execute(array('user_Id' => $userId));
+	
+		$quizes = array();
+
+		while($row = $stmt->fetch()) {
+			$quiz = new \model\Quiz($row[self::$quiz_nameField], $row[self::$quiz_creatorIdField], $row[self::$quiz_isActiveField]);
+			$quiz->setQuizId($row[self::$quiz_idField]);
+			$quizes[] = $quiz;
+		}
+
+		return $quizes;
+	}
+
+	public function getEmptyAvalibleQuizes($userId) {
+
+		$this->connectToDB();
+
+		$sql = 'SELECT *
+				FROM ' . self::$quiz_tableName . '
+				WHERE NOT EXISTS
+					(SELECT * 
+		     		FROM ' . self::$done_tableName . '
+		     		WHERE ' . self::$done_tableName . '.' . self::$done_quizIdField . '=' . self::$quiz_tableName . '.' . self::$quiz_idField . '
+		     		AND ' . self::$done_tableName . '.' . self::$done_userIdField . '= :user_Id)
+				AND ' . self::$quiz_isActiveField . '=TRUE';
+
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array('user_Id' => $userId));
+	
+		$quizes = array();
+
+		while($row = $stmt->fetch()) {
+			$quiz = new \model\Quiz($row[self::$quiz_nameField], $row[self::$quiz_creatorIdField], $row[self::$quiz_isActiveField]);
+			$quiz->setQuizId($row[self::$quiz_idField]);
+			$quizes[] = $quiz;
+		}
+
+		return $quizes;
+	}
 
 	public function getEmptyQuizes() {
 
 		$this->connectToDB();
 
 		$sql = 'SELECT *
-				FROM ' . self::$tableName;
+				FROM ' . self::$quiz_tableName;
 
 		$stmt = $this->dbConnection->query($sql);
 	
 		$quizes = array();
 
 		while($row = $stmt->fetch()) {
-			$quiz = new \model\Quiz($row[self::$nameField]);
-			$quiz->setQuizId($row[self::$idField]);
+			$quiz = new \model\Quiz($row[self::$quiz_nameField], $row[self::$quiz_creatorIdField], $row[self::$quiz_isActiveField]);
+			$quiz->setQuizId($row[self::$quiz_idField]);
 			$quizes[] = $quiz;
 		}
 
@@ -64,8 +116,8 @@ class QuizDAL extends \model\SuperDAL {
 		$this->connectToDB();
 
 		$sql = 'SELECT *
-				FROM ' . self::$tableName . '
-				WHERE ' . self::$idField . ' = :quiz_Id';
+				FROM ' . self::$quiz_tableName . '
+				WHERE ' . self::$quiz_idField . ' = :quiz_Id';
 
 		$stmt = $this->dbConnection->prepare($sql);
 	
@@ -74,8 +126,8 @@ class QuizDAL extends \model\SuperDAL {
 		$result = $stmt->fetch();
 		
 		// Skapar Quiz med titel och id
-		$quiz = new \model\Quiz($result[self::$nameField]);
-		$quiz->setQuizId($result[self::$idField]);
+		$quiz = new \model\Quiz($result[self::$quiz_nameField], $result[self::$quiz_creatorIdField], $result[self::$quiz_isActiveField]);
+		$quiz->setQuizId($result[self::$quiz_idField]);
 
 		// Populerar Quiz med Questions
 		$questionDAL = new \model\QuestionDAL();
@@ -90,12 +142,14 @@ class QuizDAL extends \model\SuperDAL {
 
 		// Spara i Quiz tabell
 		
-		$sql = 'INSERT INTO ' . self::$tableName . ' (' . self::$nameField . ') 
-				VALUES (:quiz_Name)';
+		$sql = 'INSERT INTO ' . self::$quiz_tableName . ' (' . self::$quiz_nameField . ') 
+				VALUES (:quiz_Name, :is_Active)';
 
 		$stmt = $this->dbConnection->prepare($sql);
 	
-		$stmt->execute(array('quiz_Name' => $quiz->getQuizName()));
+		$stmt->execute(array('quiz_Name' => $quiz->getQuizName(),
+							 'is_Active' =>	$quiz->getIsActive())
+		);
 
 		$quizId = $this->dbConnection->lastInsertId();
 

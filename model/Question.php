@@ -29,6 +29,10 @@ class Question {
 		return $this->answers;
 	}
 
+	public function getCorrectAnswer() {
+		return $this->answers[0];
+	}
+
 	public function getMediaPath() {
 		return $this->mediaPath;
 	}
@@ -42,9 +46,9 @@ class Question {
 
 	}
 
-	public function isTextQuestion() {
-		return count($this->answers) == 1;
-	}
+	// public function isTextQuestion() {
+	// 	return count($this->answers) == 1;
+	// }
 
 	public function isCorrect($answer) {
 		return strtolower($answer) == strtolower($this->answers[0]);

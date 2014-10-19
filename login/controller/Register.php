@@ -27,9 +27,9 @@ class Register {
 			$password = $this->view->getPassword();
 			$repeatedPassword = $this->view->getRepeatedPassword();
 
-			if(strlen($username) > 5) {
+			if(strlen($username) > 2) {
 
-				if(strlen($password) > 5) {
+				if(strlen($password) > 2) {
 
 					if($this->model->usernameAvalible($username)) {
 					

@@ -24,9 +24,9 @@ class LoginController {
 		$this->loginView = new \login\view\LoginView($this->loginModel);
 	}
 
-	// Login execution flow
-	public function doLogin() {
+	public function checkLoginStatus() {
 		if($this->userControl->checkUserAgent($this->loginView->getUserAgent())) {
+
 			if($this->loginModel->isLoggedIn()) {
 				if($this->loginView->didUserLogout())
 					$this->logout();
@@ -40,10 +40,13 @@ class LoginController {
 				}
 			}
 
-			return $this->getHTML();
+			if($this->loginModel->isLoggedIn())
+				return true;
+			else
+				return false;
 		}
 
-		return $this->loginView->getLoginHTML();
+		return false;
 	}
 
 	// Handles the process of logging out
@@ -80,20 +83,68 @@ class LoginController {
 		}
 	}
 
-	// Take appropriate action depending on if user is logged in or not
-	private function getHTML() {
-		if($this->loginModel->isLoggedIn()) {
+	// Return Login form
+	public function getLoginHTML() {
+		return $this->loginView->getLoginHTML();
+	}
 
-			//var_dump($this->loginModel->getLoggedInUser()); die();
-
-
-			$router = new \controller\QuizzyMaster($this->loginModel->getLoggedInUser());
-			
-			return $router->doRoute();
-
-			//return $this->loginView->getLogoutHTML();
-		} else {
-			return $this->loginView->getLoginHTML();
-		}
+	// Return Login form
+	public function getUser() {
+		return $this->loginModel->getLoggedInUser();
 	}
 }
+
+//Login execution flow
+	// public function doLogin() {
+	// 	if($this->userControl->checkUserAgent($this->loginView->getUserAgent())) {
+	// 		if($this->loginModel->isLoggedIn()) {
+	// 			if($this->loginView->didUserLogout())
+	// 				$this->logout();
+	// 		} else {
+	// 			if($this->credentialsHandler->cookieExist()){
+	// 				$this->cookieLogin();
+	// 			} else {
+	// 				if($this->loginView->didUserLogin()) {
+	// 					$this->login();
+	// 				}
+	// 			}
+	// 		}
+
+	// 		return $this->getHTML();
+	// 	}
+
+	// 	return $this->loginView->getLoginHTML();
+	// }
+
+
+	// public function checkLogin() {
+	// 	if($this->loginModel->isLoggedIn()) {
+	// 		if($this->loginView->didUserLogout()) {
+	// 			$this->logout();
+	// 			return false;
+	// 		} else {
+	// 			return true;
+	// 		}
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
+
+
+
+// // Take appropriate action depending on if user is logged in or not
+	// private function getHTML() {
+	// 	if($this->loginModel->isLoggedIn()) {
+
+	// 		//var_dump($this->loginModel->getLoggedInUser()); die();
+
+
+	// 		//$router = new \controller\QuizzyMaster($this->loginModel->getLoggedInUser());
+			
+	// 		//return $router->doRoute();
+
+	// 		//return $this->loginView->getLogoutHTML();
+	// 	} else {
+	// 		return $this->loginView->getLoginHTML();
+	// 	}
+	// }
