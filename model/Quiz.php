@@ -27,12 +27,16 @@ class Quiz {
 		return $this->quizName;
 	}
 
-	public function getQuizStatus() {
+	public function getIsActive() {
 		return $this->isActive;
 	}
 
 	public function getQuestions() {
 		return $this->questions;
+	}
+
+	public function getCreatorId() {
+		return $this->creatorId;
 	}
 
 	public function setQuizId($quizId) {

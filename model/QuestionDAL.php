@@ -6,7 +6,51 @@ require_once('model/SuperDAL.php');
 
 class QuestionDAL extends \model\SuperDAL {
 
+	protected static $userAnswer_tableName = 'useranswer';
+	protected static $userAnswer_idField = 'userAnswerId';
+	protected static $userAnswer_doneQuizIdField = 'doneQuizId';
+	protected static $userAnswer_answerIdField = 'answerId';
 
+	
+///// todo
+	public function saveUserAnswer($doneQuizId, $answerId) {
+
+		$this->connectToDB();
+
+		$sql = 'INSERT INTO ' . self::$userAnswer_tableName . ' (' .self::$userAnswer_doneQuizIdField . ', ' . self::$userAnswer_answerIdField . ') 
+				VALUES (:doneQuiz_Id, :answer_Id)';
+
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array(
+			'doneQuiz_Id' => $doneQuizId,
+			'answer_Id' => $answerId)
+		);
+	}
+
+
+
+
+
+
+	public function getAnswerIdByQuestionIdAndAnswer($questionId, $answer) {
+
+		$this->connectToDB();
+
+		$sql = 'SELECT ' . self::$answer_idField . '
+				FROM ' . self::$answer_tableName . '
+				WHERE ' . self::$answer_questionIdField . '=:question_Id AND ' . self::$answer_answerField . '=:answer';
+
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array('question_Id' => $questionId,
+							 'answer' => $answer)
+		);
+	
+		$answerId = $stmt->fetch();
+
+		return $answerId[0];
+	}
 
 	
 
@@ -103,7 +147,6 @@ class QuestionDAL extends \model\SuperDAL {
 		// Sparar Answers
 		$answers = $question->getAnswers();
 		$numberOfAnswers = count($answers);
-
 
 		// Alternativt kan man kör pop på arrayen
 		for($i = 0; $i < $numberOfAnswers; $i++) {

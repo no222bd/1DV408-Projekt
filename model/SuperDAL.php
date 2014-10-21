@@ -20,6 +20,7 @@ abstract class SuperDAL {
 	protected static $done_doneQuizIdField = 'doneQuizId';
 	protected static $done_userIdField = 'userId';
 	protected static $done_quizIdField = 'quizId';
+	protected static $done_isCompleteField = 'isComplete';
 
 	// Question table properties
 	protected static $question_tableName = 'question';

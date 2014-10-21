@@ -52,6 +52,10 @@ class QuizzyMaster {
 				case self::$PATH_MANAGE_QUIZ:
 					return self::$PATH_MANAGE_QUIZ;
 					break;
+				case self::$PATH_CREATE_QUIZ:
+					return self::$PATH_CREATE_QUIZ;
+					break;
+
 
 
 

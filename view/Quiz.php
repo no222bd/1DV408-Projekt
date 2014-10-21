@@ -7,11 +7,17 @@ require_once('\view\Question.php');
 class Quiz {
 
 	public function getQuizId() {
-		return $_GET[\view\QuizzyMaster::$QUIZ_ID];
+		if(!empty($_GET[\view\QuizzyMaster::$QUIZ_ID]))
+			return $_GET[\view\QuizzyMaster::$QUIZ_ID];
+		else 
+			return NULL;
 	}
 
 	public function getUserId() {
-		return $_GET[\view\QuizzyMaster::$USER_ID];
+		if(!empty($_GET[\view\QuizzyMaster::$USER_ID]))
+			return $_GET[\view\QuizzyMaster::$USER_ID];
+		else
+			return NULL;
 	}
 
 
@@ -30,6 +36,14 @@ class Quiz {
 		return $_POST['answer'];
 	}
 
+	public function getQuestionId() {
+		return $_POST['questionId'];
+	}
+
+	public function getDoneQuizId() {
+		return $_POST['doneQuizId'];
+	}
+
 	public function getResultHTML($correctCount, $questionIdex) {
 		$html = '<p>Du hade ' . $correctCount . ' av ' . $questionIdex . ' rätt!</p>';
 
@@ -38,14 +52,14 @@ class Quiz {
 		return $html;
 	}
 
-	public function getHTML(\model\Question $question, $numberOfQuestions , $quizName, $questionIndex) {
+	public function getHTML(\model\Question $question, $numberOfQuestions , $quizName, $questionNumber) {
 		$html = '<h2>' . $quizName . '</h2>';
 
 		$html .= '<div id="questionBox">'
 					  . (new \view\Question())->getHTML($question) .
 				 '</div>';
 
-		$html .= '<h3>Fråga ' . ($questionIndex + 1) . ' / ' . $numberOfQuestions . '</h3>';
+		$html .= '<h3>Fråga ' . $questionNumber . ' / ' . $numberOfQuestions . '</h3>';
 
 		return $html;		
 	}
@@ -64,6 +78,19 @@ class Quiz {
 
 		move_uploaded_file($_FILES['imageFile']['tmp_name'], $target_path);
 	}
+
+	
+	public function isLastQuestion() {
+		return isset($_POST['lastQuestion']);
+	}
+
+
+
+	public function getQuizIdFromPOST() {
+		if(isset($_POST['quizId']))
+			return $_POST['quizId'];
+	}
+
 
 	public function getQuizTitle() {
 		if(isset($_POST['quizTitle']))
@@ -110,7 +137,7 @@ class Quiz {
 		return $html;
 	}
 
-	public function getQuestionFormHTML($questionNumber) {
+	public function getQuestionFormHTML($questionNumber, $showDoneButton = false) {
 
 		$html = '<h2>Skapa fråga ' . $questionNumber . '</h2>
 				<form method="POST" enctype="multipart/form-data">
@@ -134,8 +161,12 @@ class Quiz {
 					</label>
 					<label> Ange svarsalternativ 3
 						<input type="text" name="answer4" />
-					</label>
-					<input type="submit" value="Spara"/>
+					</label>';
+	
+		if($showDoneButton)
+				$html .= '<input type="submit" value="Detta är sista frågan" name="lastQuestion"/>';
+
+		$html .= '<input type="submit" value="Ny fråga"/>
 			</form>';
 
 		return $html;	
@@ -151,6 +182,23 @@ class Quiz {
 
 		foreach ($quizes as $quiz) {
 			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+		}
+
+		return $html;
+	}
+
+	// Manage My Quizes ====================================================================================================
+
+	public function getAdminQuizListHTML($quizes) {
+
+
+
+		$html = '<h2>Mina Quiz</h2>';
+
+		foreach ($quizes as $quiz) {
+			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a>
+					     <a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Lägg till fråga</a>
+				      </p>'; 
 		}
 
 		return $html;

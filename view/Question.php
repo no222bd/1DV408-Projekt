@@ -20,6 +20,9 @@ class Question {
 			$answers = $question->getAnswers();
 			shuffle($answers);
 
+			// Skicka questionId i dolt fält
+			$html .= '<input type="hidden" value="' . $question->getQuestionId() . '" name="questionId" />';
+
 			foreach ($answers as $answer) {
 				$html .= '<label>'
 							. '<input type="radio" name="answer" value="' . $answer . '" required />'
