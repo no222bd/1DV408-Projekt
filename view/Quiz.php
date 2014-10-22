@@ -4,7 +4,22 @@ namespace view;
 
 require_once('\view\Question.php');
 
+
+
+
+
+
+
 class Quiz {
+
+	private $messageHandler;
+
+
+	public function __construct() {
+		$this->messageHandler = new \view\MessageHandler();
+	}
+
+
 
 	public function getQuizId() {
 		if(!empty($_GET[\view\QuizzyMaster::$QUIZ_ID]))
@@ -174,18 +189,18 @@ class Quiz {
 
 	// List Quizes ====================================================================================================
 
-	public function getQuizListHTML($quizes) {
+	// public function getQuizListHTML($quizes) {
 
 
 
-		$html = '<h2>Tillgängliga Quiz</h2>';
+	// 	$html = '<h2>Tillgängliga Quiz</h2>';
 
-		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
-		}
+	// 	foreach ($quizes as $quiz) {
+	// 		$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+	// 	}
 
-		return $html;
-	}
+	// 	return $html;
+	// }
 
 	// Manage My Quizes ====================================================================================================
 
@@ -193,12 +208,25 @@ class Quiz {
 
 
 
-		$html = '<h2>Mina Quiz</h2>';
+		$html = '<h2>Mina Quiz <a href="' . \Settings::$ROOT_PATH . '"><span class="icon icon-small" style="float: right"><span class="icon-home"></span></span></a></h2>';
+
+		if($this->messageHandler->hasMessage())
+			$html .= '<p>' . $this->messageHandler->getMessage() . '</p>';
+
 
 		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a>
-					     <a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Lägg till fråga</a>
-				      </p>'; 
+
+
+
+			$html .= '<div class="row"><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a>
+					     <a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Lägg till fråga</a>';
+			
+			if($quiz->getIsActive())
+				$html .= '<a href="?action=' . \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Inaktivera</a>'; 
+			else
+				$html .= '<a href="?action=' . \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Aktivera</a>'; 
+
+			$html .= '</div>'; 
 		}
 
 		return $html;
@@ -236,7 +264,7 @@ class Quiz {
 	public function getQuizResultHTML($quiz, $userAnswers) {
 
 		$html = '<h2>Single quiz result</h2>
-				 <h3>' .  $quiz->getQuizName() . '</h3>
+				 <h2>Quiz-resultat' .  $quiz->getQuizName() . '</h2>
 				 <hr>';
 
 		foreach ($quiz->getQuestions() as $question) {
@@ -245,10 +273,6 @@ class Quiz {
 
 			$html .= '<p>Rätt svar: ' . $question->getCorrectAnswer() . '</p>
 					  <p>Ditt svar: ' . $userAnswers[$question->getQuestionId()] . '</p><hr>';		
-
-
-
-
 		}
 
 		return $html;

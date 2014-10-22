@@ -55,6 +55,17 @@ class QuizzyMaster {
 						return (new \controller\Quiz($user))->createQuiz();
 						break;
 
+					case \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ:
+						return (new \controller\Quiz($user))->manageQuiz();
+						break;	
+					case \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ:
+						return (new \controller\Quiz($user))->manageQuiz();
+						break;
+
+
+
+
+
 					case \view\QuizzyMaster::$PATH_HOME:
 						return  $this->view->getAdminHTML();
 						break;

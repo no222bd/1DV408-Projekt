@@ -13,6 +13,9 @@ class QuizzyMaster {
 	public static $PATH_MANAGE_QUIZ = 'managequiz';
 	public static $PATH_CREATE_QUIZ = 'createquiz';
 	public static $PATH_DELETE_QUIZ = 'deletequiz';
+    
+    public static $PATH_DEACTIVATE_QUIZ = 'deactivatequiz';
+	public static $PATH_ACTIVATE_QUIZ = 'activatequiz';
 
 	// User 
 	public static $PATH_DO_QUIZ = 'doquiz';
@@ -54,6 +57,12 @@ class QuizzyMaster {
 					break;
 				case self::$PATH_CREATE_QUIZ:
 					return self::$PATH_CREATE_QUIZ;
+					break;
+				case self::$PATH_DEACTIVATE_QUIZ:
+					return self::$PATH_DEACTIVATE_QUIZ;
+					break;
+				case self::$PATH_ACTIVATE_QUIZ:
+					return self::$PATH_ACTIVATE_QUIZ;
 					break;
 
 

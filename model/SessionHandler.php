@@ -15,16 +15,16 @@ class SessionHandler {
 	// 	unset($_SESSION['doneQuizId' . $quizId]);
 	// }
 
-	public function setQuizId($quizId) {
-		$_SESSION['quizId'] = $quizId;
-	}
+	// public function setQuizId($quizId) {
+	// 	$_SESSION['quizId'] = $quizId;
+	// }
 
-	// controller/Quiz->doQuiz()
+	// // controller/Quiz->doQuiz()
 
-	public function getQuizId() {
-		if(isset($_SESSION['quizId']))
-			return $_SESSION['quizId'];
-	}
+	// public function getQuizId() {
+	// 	if(isset($_SESSION['quizId']))
+	// 		return $_SESSION['quizId'];
+	// }
 
 	// public function incrementQuestionIndex() {
 	// 	if(isset($_SESSION['questionIndex']))

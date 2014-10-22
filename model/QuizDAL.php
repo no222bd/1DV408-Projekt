@@ -15,6 +15,47 @@ class QuizDAL extends \model\SuperDAL {
 	// protected static $done_userIdField = 'userId';
 	// protected static $done_quizIdField = 'quizId';
 
+
+	// protected static $quiz_tableName = 'quiz';
+	// protected static $quiz_idField = 'quizId';
+	// protected static $quiz_nameField = 'name';
+	// protected static $quiz_creatorIdField = 'creatorId';
+	// protected static $quiz_isActiveField = 'isActive';
+
+
+
+
+
+	public function toogleQuizActivation($quizId) {
+
+		$this->connectToDB();
+
+		$sql = 'SELECT ' . self::$quiz_isActiveField . '
+				FROM ' . self::$quiz_tableName . '
+				WHERE ' . self::$quiz_idField . '=:quiz_Id';
+
+		$stmt = $this->dbConnection->prepare($sql);
+
+		$stmt->execute(array('quiz_Id' => $quizId));
+	
+		$quizIsActive = $stmt->fetch();
+
+		if($quizIsActive[0])
+			$status = false;
+		else
+			$status = true;
+
+		$sql = 'UPDATE ' . self::$quiz_tableName . '
+			 	SET ' . self::$quiz_isActiveField . '=:status
+			 	WHERE ' . self::$quiz_idField . '=:quiz_Id';
+
+		$stmt = $this->dbConnection->prepare($sql);
+	
+		$stmt->execute(array('status' => $status,
+							 'quiz_Id' => $quizId)
+		);
+	}
+
 	public function updateDoneQuizIsComplete($doneQuizId) {
 
 		$this->connectToDB();
