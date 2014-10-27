@@ -51,9 +51,9 @@ class Register {
 		
 		$html = '<h2>Registrera användare</h2>
 				
-				<form id="authentication" action="' . $_SERVER['PHP_SELF'] . '?action=register" method="post">		<!-- STRÄNGBEROENDE!!! -->
-					<fieldset>
-						<!--legend>Registrera ny användare</legend-->';
+				<div class="login">
+
+				<form method="post">';		//<!-- STRÄNGBEROENDE!!! -->
 		
 		if(isset($this->message))
 			$html .= '<p class="message">' . $this->message . '</p>';
@@ -65,18 +65,21 @@ class Register {
 		if(isset($_POST[self::$username]))
 			$html .= ' value="' . strip_tags($_POST[self::$username]) . '"';
 
+		//echo $_SERVER['PHP_SELF'] . 'hej';
+
 		$html .= '/>
-					</label><br/>
+					</label>
 					<label>Lösenord
  						<input type="password" name="' . self::$password . '"/>
-					</label><br/>
+					</label>
 					<label>Repetera lösenord
 						<input type="password" name="' .self::$repeatedPassword. '"/>
-					</label><br/>
+					</label>
+
+					<a href="' . \Settings::$ROOT_PATH . '">Tillbaka</a>
 					<input type="submit" name="' . self::$registerButton . '" value="Registrera"/>
-				</fieldset>
-			</form>
-			<p><a href="' . \Settings::$ROOT_PATH . '">Tillbaka</a></p>											<!-- STRÄNGBEROENDE!!! -->';
+				</form>
+			</div>';
 		
 		return $html;
 	}

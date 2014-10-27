@@ -2,159 +2,122 @@
 
 namespace view;
 
-require_once('\view\Question.php');
-
-
-
-
-
-
+require_once('view/Question.php');
 
 class Quiz {
 
-	private $messageHandler;
+    private $messageHandler;
 
+    public function __construct() {
+        $this->messageHandler = new \view\MessageHandler();
+    }
 
-	public function __construct() {
-		$this->messageHandler = new \view\MessageHandler();
-	}
+    public function getQuizId() {
+        if (!empty($_GET[\view\QuizzyMaster::$QUIZ_ID]))
+            return $_GET[\view\QuizzyMaster::$QUIZ_ID];
+        else
+            return NULL;
+    }
 
+    public function getUserId() {
+        if (!empty($_GET[\view\QuizzyMaster::$USER_ID]))
+            return $_GET[\view\QuizzyMaster::$USER_ID];
+        else
+            return NULL;
+    }
 
+    // Do Quiz ====================================================================================================
 
-	public function getQuizId() {
-		if(!empty($_GET[\view\QuizzyMaster::$QUIZ_ID]))
-			return $_GET[\view\QuizzyMaster::$QUIZ_ID];
-		else 
-			return NULL;
-	}
+    public function isPostBack() {
+        return $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['answer']);
+    }
 
-	public function getUserId() {
-		if(!empty($_GET[\view\QuizzyMaster::$USER_ID]))
-			return $_GET[\view\QuizzyMaster::$USER_ID];
-		else
-			return NULL;
-	}
+    public function getAnswer() {
+        return $_POST['answer'];
+    }
 
+    public function getQuestionId() {
+        return $_POST['questionId'];
+    }
 
-	// Do Quiz ====================================================================================================
-	
-	// public function getQuizId() {
-	// 	return $_GET[\view\QuizzyMaster::$PATH_DO];
-	// }
+    public function getDoneQuizId() {
+        return $_POST['doneQuizId'];
+    }
 
+    public function getResultHTML($correctCount, $questionIdex) {
+        $html = '<p>Du hade ' . $correctCount . ' av ' . $questionIdex . ' rätt!</p>';
 
-	public function isPostBack() {
-		return $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['answer']);
-	}
+        $html .= '<a href="?">Till huvudmenyn</a';
 
-	public function getAnswer() {
-		return $_POST['answer'];
-	}
+        return $html;
+    }
 
-	public function getQuestionId() {
-		return $_POST['questionId'];
-	}
+    public function getHTML(\model\Question $question, $numberOfQuestions, $quizName, $questionNumber) {
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>' . $quizName . '</h2>';
 
-	public function getDoneQuizId() {
-		return $_POST['doneQuizId'];
-	}
+        $html .= '<div id="questionBox">'
+                . (new \view\Question())->getHTML($question) .
+                '</div>';
 
-	public function getResultHTML($correctCount, $questionIdex) {
-		$html = '<p>Du hade ' . $correctCount . ' av ' . $questionIdex . ' rätt!</p>';
+        $html .= '<h3>Fråga ' . $questionNumber . ' / ' . $numberOfQuestions . '</h3>';
 
-		$html .= '<a href="?">Till huvudmenyn</a';
+        return $html;
+    }
 
-		return $html;
-	}
+    // Create Quiz ====================================================================================================
+    
+    public function isLastQuestion() {
+        return isset($_POST['lastQuestion']);
+    }
 
-	public function getHTML(\model\Question $question, $numberOfQuestions , $quizName, $questionNumber) {
-		$html = '<h2>' . $quizName . '</h2>';
+    public function getQuizIdFromPOST() {
+        if (isset($_POST['quizId']))
+            return $_POST['quizId'];
+    }
 
-		$html .= '<div id="questionBox">'
-					  . (new \view\Question())->getHTML($question) .
-				 '</div>';
+    public function getQuizTitle() {
+        if (isset($_POST['quizTitle']))
+            return $_POST['quizTitle'];
+        else
+            return NULL;
+    }
 
-		$html .= '<h3>Fråga ' . $questionNumber . ' / ' . $numberOfQuestions . '</h3>';
+    public function getQuestion() {
+        if (isset($_POST['question']))
+            return $_POST['question'];
+        else
+            return NULL;
+    }
 
-		return $html;		
-	}
+    public function getAnswers() {
+        $answers = array();
 
-	// Create Quiz ====================================================================================================
+        $answers[] = $_POST['answer1'];
+        $answers[] = $_POST['answer2'];
+        $answers[] = $_POST['answer3'];
+        $answers[] = $_POST['answer4'];
 
-	public function hasFileUpload() {
-		return !empty($_FILES['imageFile']);
-	}
+        return $answers;
+    }
 
-	public function handleFile($quizId) {
+    public function getTitleFormHTML() {
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Skapa Quiz</h2>';
 
-		$target_path = 'media/images/';
+        $html .= '<p> Ange Quiz-namn </p>';
 
-		$target_path = $target_path . basename( $_FILES['imageFile']['name']); 
-
-		move_uploaded_file($_FILES['imageFile']['tmp_name'], $target_path);
-	}
-
-	
-	public function isLastQuestion() {
-		return isset($_POST['lastQuestion']);
-	}
-
-
-
-	public function getQuizIdFromPOST() {
-		if(isset($_POST['quizId']))
-			return $_POST['quizId'];
-	}
-
-
-	public function getQuizTitle() {
-		if(isset($_POST['quizTitle']))
-			return $_POST['quizTitle'];
-	}
-
-	public function getQuestion() {
-		if(isset($_POST['question']))
-			return $_POST['question'];
-	}
-
-	public function getAnswers() {
-		$answers = array();
-
-		$answers[] = $_POST['answer1'];
-		$answers[] = $_POST['answer2'];
-		$answers[] = $_POST['answer3'];
-		$answers[] = $_POST['answer4'];
-
-		// if(empty($_POST['answer4'])) {
-		// 	$answers[] = $_POST['answer1'];
-		// } else {
-		// 	$answers[] = $_POST['answer1'];
-		// 	$answers[] = $_POST['answer2'];
-		// 	$answers[] = $_POST['answer3'];
-		// 	$answers[] = $_POST['answer4'];
-		// }
-
-		return $answers;
-	}
-
-	public function getTitleFormHTML() {
-		$html = '<h2>Skapa Quiz</h2>';
-		
-		$html .= '<p> Ange Quiz-namn </p>';
-
-		$html .= '<form method="POST">
+        $html .= '<form method="POST">
 						<label>Quiznamn
 							<input type="text" name="quizTitle" required />
 						</label>
 						<input type="submit" value="Skapa"/>
 				  </form>';
-		
-		return $html;
-	}
 
-	public function getQuestionFormHTML($questionNumber, $showDoneButton = false) {
+        return $html;
+    }
 
-		$html = '<h2>Skapa fråga ' . $questionNumber . '</h2>
+    public function getQuestionFormHTML($questionNumber, $showDoneButton = false) {
+
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Skapa fråga ' . $questionNumber . '</h2>
 				<form method="POST" enctype="multipart/form-data">
 					<label> Ange fråga
 						<input type="text" name="question" required />
@@ -162,9 +125,9 @@ class Quiz {
 					<label> Ange svar
 						<input type="text" name="answer1" required />
 					</label>
-					<!--hr>
+					<hr>
 
-					<input type="file" name="imageFile"><br>
+					<input type="file" name="newFile"><br>
 
 					<hr>
 					<p>Om flervalsfråga önskas, fyll i alla nedanstående</p-->
@@ -177,104 +140,209 @@ class Quiz {
 					<label> Ange svarsalternativ 3
 						<input type="text" name="answer4" />
 					</label>';
-	
-		if($showDoneButton)
-				$html .= '<input type="submit" value="Detta är sista frågan" name="lastQuestion"/>';
 
-		$html .= '<input type="submit" value="Ny fråga"/>
+        if ($showDoneButton)
+            $html .= '<input type="submit" value="Detta är sista frågan" name="lastQuestion"/>';
+
+        $html .= '<input type="submit" value="Ny fråga"/>
 			</form>';
 
-		return $html;	
-	}
+        return $html;
+    }
 
-	// List Quizes ====================================================================================================
+    // List Quizes ====================================================================================================
+    // public function getQuizListHTML($quizes) {
+    // 	$html = '<h2>Tillgängliga Quiz</h2>';
+    // 	foreach ($quizes as $quiz) {
+    // 		$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
+    // 	}
+    // 	return $html;
+    // }
+    // Manage My Quizes ====================================================================================================
 
-	// public function getQuizListHTML($quizes) {
+    public function getAdminQuizListHTML($quizes) {
+
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Mina Quiz</h2>';
+
+        if ($this->messageHandler->hasMessage())
+            $html .= '<p>' . $this->messageHandler->getMessage() . '</p>';
+
+        $html .= '<table class="listtable">
+                      <thead>
+                        <tr>
+                          <th class="left">Quiznamn</th>
+                          <th class="center">Storlek</th>
+                          <th class="center">Utöka</th>
+                          <th class="center">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>';        
+
+        foreach ($quizes as $quiz) {
+
+            $html .= '<tr>
+                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_QUIZ_STATS . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+					    <td class="center">' . count($quiz->getQuestions()) . '</td>
+                        <td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">+</a></td>';
+
+            if ($quiz->getIsActive())
+                $html .= '<td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Inaktivera</a></td>';
+            elseif(count($quiz->getQuestions()) > 2)    // Strängberoende
+                $html .= '<td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Aktivera</a></td>';
+
+            $html .= '</tr>';
+        }
+
+        $html .= '  </tbody>
+                  </table>';
+
+        return $html;
+    }
+
+    // Quiz Statistics ====================================================================================================
+
+    public function getQuizStatisticsHTML($quiz, $resultArray) {
+        
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Quiz Statistik - ' . $quiz->getQuizname() . '</h2>';
+
+        $html .= '<h3>Antal frågor: ' . count($quiz->getQuestions()) . '</h3>';
 
 
+        $html .= '<table class="listtable">
+                      <thead>
+                        <tr>
+                          <th class="left">Användare</th>
+                          <th class="center">Antal rätt</th>
+                        </tr>
+                      </thead>
+                      <tbody>';
 
-	// 	$html = '<h2>Tillgängliga Quiz</h2>';
+        foreach ($resultArray as $result) {
 
-	// 	foreach ($quizes as $quiz) {
-	// 		$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
-	// 	}
+            $html .= '<tr>
+                        <td class="left">' . $result[1] . '
+                        <td class="center">' . $result[2] . '
+                     </tr>';
+        }
 
-	// 	return $html;
-	// }
-
-	// Manage My Quizes ====================================================================================================
-
-	public function getAdminQuizListHTML($quizes) {
-
-
-
-		$html = '<h2>Mina Quiz <a href="' . \Settings::$ROOT_PATH . '"><span class="icon icon-small" style="float: right"><span class="icon-home"></span></span></a></h2>';
-
-		if($this->messageHandler->hasMessage())
-			$html .= '<p>' . $this->messageHandler->getMessage() . '</p>';
-
-
-		foreach ($quizes as $quiz) {
-
+        $html .= '</tbody>
+                  </table>';
+    
+        return $html;
+    }
 
 
-			$html .= '<div class="row"><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a>
-					     <a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Lägg till fråga</a>';
-			
-			if($quiz->getIsActive())
-				$html .= '<a href="?action=' . \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Inaktivera</a>'; 
-			else
-				$html .= '<a href="?action=' . \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Aktivera</a>'; 
+    // TODO
+    // User Statistics ====================================================================================================
 
-			$html .= '</div>'; 
-		}
+    public function getUserStatisticsHTML($user, $userResultArray) {
 
-		return $html;
-	}
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Statistik - ' . $user->getUsername() . '</h2>';
 
-	// List Avalible Quizes ====================================================================================================
-	
-	public function getAvalibleQuizListHTML($quizes) {
+        $html .= '<h3>Antal quiz: ' . count($userResultArray) . '</h3>';
 
-		$html = '<h2>Nya Tillgängliga Quiz</h2>';
 
-		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
-		}
+        $html .= '<table class="listtable">
+                      <thead>
+                        <tr>
+                          <th class="left">Quiznamn</th>
+                          <th class="center">Resultat</th>
+                        </tr>
+                      </thead>
+                      <tbody>';
 
-		return $html;
-	}
+        foreach ($userResultArray as $result) {
 
-	// List Done Quizes ====================================================================================================
+            $html .= '<tr>
+                        <td class="left">' . $result[0] . '
+                        <td class="center">' . $result[1] . ' / ' . $result[2] . '
+                     </tr>';
+        }
 
-	public function getDoneQuizListHTML($quizes) {
+        $html .= '</tbody>
+                  </table>';
+    
+        return $html;
+    }
 
-		$html = '<h2>Gjorda Quiz</h2>';
 
-		foreach ($quizes as $quiz) {
-			$html .= '<p><a href="?action=' . \view\QuizzyMaster::$PATH_SHOW_RESULT .  '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></p>';
-		}
+    // List Avalible Quizes ====================================================================================================
 
-		return $html;
-	}
+    public function getAvalibleQuizListHTML($quizes) {
 
-	
-	// Quiz result html ====================================================================================================
-	// PARAMETERTEST
-	public function getQuizResultHTML($quiz, $userAnswers) {
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Tillgängliga Quiz</h2>';
 
-		$html = '<h2>Single quiz result</h2>
-				 <h2>Quiz-resultat' .  $quiz->getQuizName() . '</h2>
-				 <hr>';
+        $html .= '<table class="listtable">
+                      <thead>
+                        <tr>
+                          <th class="left">Quiznamn</th>
+                          <th class="center">Antal frågor</th>
+                        </tr>
+                      </thead>
+                      <tbody>';
 
-		foreach ($quiz->getQuestions() as $question) {
-			
-			$html .= '<h3>' . $question->getQuestion() . '</h3>';
+        foreach ($quizes as $quiz) {
+            $html .= '<tr>
+                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+                        <td class="center">' . count($quiz->getQuestions()) . '</td>
+                      </tr>';
+        }
 
-			$html .= '<p>Rätt svar: ' . $question->getCorrectAnswer() . '</p>
-					  <p>Ditt svar: ' . $userAnswers[$question->getQuestionId()] . '</p><hr>';		
-		}
 
-		return $html;
-	}
+        $html .= '  </tbody>
+                  </table>';
+
+        return $html;
+    }
+
+    // List Done Quizes ====================================================================================================
+
+    public function getDoneQuizListHTML($quizes, $userId, $quizDAL) {
+
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Gjorda Quiz</h2>';
+
+
+        $html .= '<table class="listtable">
+                      <thead>
+                        <tr>
+                          <th class="left">Quiznamn</th>
+                          <th class="center">Resultat</th>
+                        </tr>
+                      </thead>
+                      <tbody>';
+
+        foreach ($quizes as $quiz) {
+
+            $html .= '<tr>
+                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_SHOW_RESULT . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+                        <td class="center">' . $quizDAL->getQuizResult($quiz->getQuizId(), $userId) . ' av ' . count($quiz->getQuestions()) . '</td>
+                      </tr>';
+        }
+
+        $html .= '  </tbody>
+                  </table>';
+        
+        return $html;
+    }
+
+    // Quiz result html ====================================================================================================
+    // PARAMETERTEST
+    public function getQuizResultHTML($quiz, $userAnswers, $result) {
+
+        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Resultat - ' . $quiz->getQuizName() . '</h2>';
+
+        $html .= '<p>Antal rätt: ' . $result . ' / ' . count($quiz->getQuestions()) . '</p>';
+
+        foreach ($quiz->getQuestions() as $question) {
+
+            $html .= '<div class="result">
+                    <h4>' . $question->getQuestion() . '</h4>';
+
+            $html .= '<p>Rätt svar: ' . $question->getCorrectAnswer() . '</p>
+					  <p>Ditt svar: ' . $userAnswers[$question->getQuestionId()] . '</p></div>';
+        }
+
+        return $html;
+    }
+
 }

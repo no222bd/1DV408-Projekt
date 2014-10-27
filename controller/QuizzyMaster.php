@@ -3,9 +3,10 @@
 namespace controller;
 
 require_once('view/QuizzyMaster.php');
-require_once('controller/Quiz.php');
-require_once('controller/User.php');
+// require_once('controller/Quiz.php');
+// require_once('controller/User.php');
 require_once('login/controller/LoginController.php');
+require_once('login/controller/Register.php'); 
 
 class QuizzyMaster {
 
@@ -44,7 +45,6 @@ class QuizzyMaster {
 					case \view\QuizzyMaster::$PATH_MAKEADMIN:
 						return (new \controller\User())->manageUser();
 						break;
-
 					case \view\QuizzyMaster::$PATH_MANAGE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;
@@ -54,21 +54,21 @@ class QuizzyMaster {
 					case \view\QuizzyMaster::$PATH_CREATE_QUIZ:
 						return (new \controller\Quiz($user))->createQuiz();
 						break;
-
 					case \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;	
 					case \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;
-
-
-
-
-
-					case \view\QuizzyMaster::$PATH_HOME:
-						return  $this->view->getAdminHTML();
+					case \view\QuizzyMaster::$PATH_QUIZ_STATS:
+						return (new \controller\Quiz($user))->showQuizStatistics();
+						break;	
+					case \view\QuizzyMaster::$PATH_USER_STATS:
+						return (new \controller\Quiz($user))->showUserStatistics();
 						break;
+					// case \view\QuizzyMaster::$PATH_HOME:
+					// 	return  $this->view->getAdminHTML();
+					// 	break;
 					default:
 						return  $this->view->getAdminHTML();
 						break;
@@ -96,13 +96,9 @@ class QuizzyMaster {
 					// case \view\QuizzyMaster::$PATH_LIST:
 					// 	return (new \controller\Quiz())->listQuizes();
 					// 	break;
-
-
-
-
-					case \view\QuizzyMaster::$PATH_HOME:
-						return  $this->view->getUserHTML();
-						break;
+					// case \view\QuizzyMaster::$PATH_HOME:
+					// 	return  $this->view->getUserHTML();
+					// 	break;
 					default:
 						return  $this->view->getUserHTML();
 						break;
@@ -110,15 +106,11 @@ class QuizzyMaster {
 			}
 		}
 
-
-
 		// Kolla och visa Login eller Registration formulär
 		if(\view\QuizzyMaster::getAction() == \view\QuizzyMaster::$PATH_REGISTER) {
-			
 			return (new \login\controller\Register())->doRegister();
 		}
 		else {
-			//echo "hej"; die();
 			return $this->login_controller->getLoginHTML();
 		}
 	}

@@ -4,8 +4,6 @@ namespace model;
 
 class SessionHandler {
 
-
-
 	// public function getDoneQuizId($quizId) {
 	// 	if(isset($_SESSION['doneQuizId' . $quizId]))
 	// 		return $_SESSION['doneQuizId'];

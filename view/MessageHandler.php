@@ -2,29 +2,27 @@
 
 namespace view;
 
-// Handles the user feedback
 class MessageHandler {
 
-	private $currentMessage;
-	
-	// Check if message exists
-	public function hasMessage() {
-		return !empty($_COOKIE['message']);
-	}
+    private static $message = 'message';
 
-	public function setMessage($message) {
-		setcookie('message', $message, 0);
-	}
+    public function hasMessage() {
+        return !empty($_COOKIE[self::$message]);
+    }
 
-	public function getMessage() {
-		$output = $_COOKIE['message'];
-			
-		$this->removeMessage();
+    public function setMessage($message) {
+        setcookie(self::$message, $message, 0);
+    }
 
-		return $output;
-	}
+    public function getMessage() {
+        $output = $_COOKIE[self::$message];
 
-	public function removeMessage() {
-		setcookie('message', '', time() - 1);
-	}
+        $this->removeMessage();
+
+        return $output;
+    }
+
+    public function removeMessage() {
+        setcookie(self::$message, '', time() - 1);
+    }
 }

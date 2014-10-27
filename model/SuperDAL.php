@@ -44,7 +44,14 @@ abstract class SuperDAL {
 	// MediaPath table properties
 	protected static $mediaPath_tableName = 'mediapath';
 	protected static $mediaPath_questionIdField = 'questionId';
-	protected static $mediaPath_path = 'mediapath';
+	protected static $mediaPath_path = 'mediaPath';
+
+	// User table properties
+    protected static $tableName = 'user';
+    protected static $userIdField = 'userId';
+    protected static $usernameField = 'username';
+    protected static $passwordField = 'password';
+    protected static $isAdminField = 'isAdmin';
 
 
 	

@@ -97,7 +97,7 @@ class QuestionDAL extends \model\SuperDAL {
 		$result = $stmt->fetch();
 
 		if($result)
-			return $result[self::$mediaPath_path];
+                    return $result[self::$mediaPath_path];
 	}
 
 	private function getAnswersByQuestionId($questionId) {
@@ -141,7 +141,7 @@ class QuestionDAL extends \model\SuperDAL {
 		$questionId = $this->dbConnection->lastInsertId();
 
 		// Spar eventuell mediaPath
-		if(!is_null($question->getMediaPath()));
+		if(!is_null($question->getMediaPath()))
 			$this->saveMediaPath($questionId, $question->getMediaPath());
 
 		// Sparar Answers

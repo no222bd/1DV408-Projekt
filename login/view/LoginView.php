@@ -82,10 +82,9 @@ class LoginView {
 	// Login HTML
 	public function getLoginHTML() {
 		$output = '
-			<h2>Frågesport für alle!</h2>											
-			<form id="authentication" action="' . $_SERVER['PHP_SELF'] .' " method="post">
-				<fieldset>
-					<!--legend>Login</legend-->';
+			<h2>Frågesport für alle!</h2>		
+			<div class="login">									
+			<form id="authentication" action="' . $_SERVER['PHP_SELF'] .' " method="post">';
 
 		if($this->message->hasMessage())
 			$output .= '<p class="message">' . $this->message->getMessage() . '</p>';				
@@ -103,16 +102,18 @@ class LoginView {
 					<label>Lösenord</label>
 						<input type="password" name="' . self::$passwordLocation . '"/>
 					
-
+					<div>
 					<label>Håll mig inloggad</label>
 						<input type="checkbox" name="' . self::$rememberMeLocation . '"/>
-						
+						</div>
 					
 			
+					<a href="?action=register" class="linkbutton">Registrera</a>
 					<input type="submit" name="' . self::$loginLocation . '" value="Logga in"/>
-				</fieldset>
-			</form>
-			<p><a href="?action=register">Registrera</a></p>';
+
+				</form>
+			</div>';
+			
 		
 		return $output;
 	}

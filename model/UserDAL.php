@@ -3,164 +3,158 @@
 namespace model;
 
 require_once('model/SuperDAL.php');
+require_once('model/User.php');
+
 
 class UserDAL extends \model\SuperDAL {
 
-	// User table properties
-	private static $tableName = 'user';
-	private static $userIdField = 'userId';
-	private static $usernameField = 'username';
-	private static $passwordField = 'password';
-	private static $isAdminField = 'isAdmin';
+    public function makeAdminById($userId) {
 
-	public function makeAdminById($userId) {
+        $this->connectToDB();
 
-		$this->connectToDB();
+        $sql = 'UPDATE ' . self::$tableName . '
+                SET ' . self::$isAdminField . '= TRUE
+                WHERE ' . self::$userIdField . '= :user_Id';
 
-		$sql = 'UPDATE ' . self::$tableName . '
-				SET ' . self::$isAdminField . '= TRUE
-				WHERE ' . self::$userIdField . '= :user_Id';
-		
-		$stmt = $this->dbConnection->prepare($sql);
+        $stmt = $this->dbConnection->prepare($sql);
 
-		$stmt->execute(array('user_Id' => $userId));
-	}
+        $stmt->execute(array('user_Id' => $userId));
+    }
 
+    public function deleteUserById($userId) {
 
-	public function deleteUserById($userId) {
+        $this->connectToDB();
 
-		$this->connectToDB();
+        $sql = 'DELETE 
+                FROM ' . self::$tableName . '
+                WHERE ' . self::$userIdField . '= :user_Id';
 
-		$sql = 'DELETE 
-				FROM ' . self::$tableName . '
-				WHERE ' . self::$userIdField . '= :user_Id';
-		
-		$stmt = $this->dbConnection->prepare($sql);
+        $stmt = $this->dbConnection->prepare($sql);
 
-		$stmt->execute(array('user_Id' => $userId));
-	}
+        $stmt->execute(array('user_Id' => $userId));
+    }
 
-	public function getUserById($userId) {
+    public function getUserById($userId) {
 
-		$this->connectToDB();
+        $this->connectToDB();
 
-		$sql = 'SELECT *
-				FROM ' . self::$tableName . '
-				WHERE ' . self::$userIdField . ' = :user_Id';
+        $sql = 'SELECT *
+                FROM ' . self::$tableName . '
+                WHERE ' . self::$userIdField . ' = :user_Id';
 
-		$stmt = $this->dbConnection->prepare($sql);
-	
-		$stmt->execute(array('user_Id' => $userId));
+        $stmt = $this->dbConnection->prepare($sql);
 
-		$result = $stmt->fetch();
-		
-		$user = new \model\User($result[self::$usernameField], $result[self::$passwordField], $result[self::$isAdminField]);
-		$user->setUserId($result[self::$userIdField]);
-		//$user->setUserType();
+        $stmt->execute(array('user_Id' => $userId));
 
-		return $user;
-	}
+        $result = $stmt->fetch();
 
-	public function getUsers() {
-		
-		$this->connectToDB();
+        $user = new \model\User($result[self::$usernameField], $result[self::$passwordField], $result[self::$isAdminField]);
+        $user->setUserId($result[self::$userIdField]);
+        //$user->setUserType();
 
-		$sql = 'SELECT *
-				FROM ' . self::$tableName;
+        return $user;
+    }
 
-		$stmt = $this->dbConnection->query($sql);
-	
-		$users = array();
+    public function getUsers() {
 
-		while($row = $stmt->fetch()) {
-			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
-			$user->setUserId($row[self::$userIdField]);
-			//$user->setUserType($row[self::$userTypeIdField]);
+        $this->connectToDB();
 
-			$users[] = $user;
-		}
+        $sql = 'SELECT *
+                FROM ' . self::$tableName;
 
-		return $users;
-	}
+        $stmt = $this->dbConnection->query($sql);
 
-	public function getUsersOnly() {
-		
-		$this->connectToDB();
+        $users = array();
 
-		$sql = 'SELECT *
-				FROM ' . self::$tableName . '
-				WHERE ' . self::$isAdminField . '= :is_Admin'; 
+        while ($row = $stmt->fetch()) {
+            $user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
+            $user->setUserId($row[self::$userIdField]);
+            //$user->setUserType($row[self::$userTypeIdField]);
 
-		$stmt = $this->dbConnection->prepare($sql);
-	
-		$stmt->execute(array(
-				'is_Admin' => 'FALSE')
-			);
+            $users[] = $user;
+        }
 
-		$users = array();
+        return $users;
+    }
 
-		while($row = $stmt->fetch()) {
-			$user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
-			$user->setUserId($row[self::$userIdField]);
-			//$user->setUserType($row[self::$userTypeIdField]);
+    public function getUsersOnly() {
 
-			$users[] = $user;
-		}
+        $this->connectToDB();
 
-		return $users;
-	}
+        $sql = 'SELECT *
+                FROM ' . self::$tableName . '
+                WHERE ' . self::$isAdminField . '= :is_Admin';
 
-	public function getArrayOfUsernames() {
-		
-		$this->connectToDB();
+        $stmt = $this->dbConnection->prepare($sql);
 
-		// Ändra så att endast usernames hämtas(används i \login\model\register)
+        $stmt->execute(array(
+            'is_Admin' => 'FALSE')
+        );
 
-		$sql = 'SELECT *
-				FROM ' . self::$tableName;
+        $users = array();
 
-		$stmt = $this->dbConnection->query($sql);
-	
-		$usernames = array();
+        while ($row = $stmt->fetch()) {
+            $user = new \model\User($row[self::$usernameField], $row[self::$passwordField], $row[self::$isAdminField]);
+            $user->setUserId($row[self::$userIdField]);
+            //$user->setUserType($row[self::$userTypeIdField]);
 
-		while($row = $stmt->fetch()) {
-			$usernames[] = $row[self::$usernameField];
-		}
+            $users[] = $user;
+        }
 
-		return $usernames;
-	}
+        return $users;
+    }
 
-	public function getUsersDataArray() {
-		
-		$this->connectToDB();
+    public function getArrayOfUsernames() {
 
-		$sql = 'SELECT *
-				FROM ' . self::$tableName;
+        $this->connectToDB();
 
-		$stmt = $this->dbConnection->query($sql);
-	
-		$users = array();
+        // Ändra så att endast usernames hämtas(används i \login\model\register)
 
-		while($row = $stmt->fetch()) {
-			$users[$row[self::$usernameField]] = $row[self::$passwordField];
-		}
+        $sql = 'SELECT *
+                FROM ' . self::$tableName;
 
-		return $users;
-	}
+        $stmt = $this->dbConnection->query($sql);
 
-	public function saveUser(\model\User $user) {
+        $usernames = array();
 
-		$this->connectToDB();
-		
-		$sql = 'INSERT INTO ' . self::$tableName . ' (' . self::$usernameField . ', ' . self::$passwordField . ', ' . self::$isAdminField . ') 
-				VALUES (:username, :password, :is_Admin)';
+        while ($row = $stmt->fetch()) {
+            $usernames[] = $row[self::$usernameField];
+        }
 
-		$stmt = $this->dbConnection->prepare($sql);
-	
-		$stmt->execute(array(
-				'username' => $user->getUsername(),
-				'password' => $user->getPassword(), 
-				'is_Admin' => $user->getIsAdmin())
-			);
-	}
+        return $usernames;
+    }
+
+    public function getUsersDataArray() {
+
+        $this->connectToDB();
+
+        $sql = 'SELECT *
+                FROM ' . self::$tableName;
+
+        $stmt = $this->dbConnection->query($sql);
+
+        $users = array();
+
+        while ($row = $stmt->fetch()) {
+            $users[$row[self::$usernameField]] = $row[self::$passwordField];
+        }
+
+        return $users;
+    }
+
+    public function saveUser(\model\User $user) {
+
+        $this->connectToDB();
+
+        $sql = 'INSERT INTO ' . self::$tableName . ' (' . self::$usernameField . ', ' . self::$passwordField . ', ' . self::$isAdminField . ') 
+                VALUES (:username, :password, :is_Admin)';
+
+        $stmt = $this->dbConnection->prepare($sql);
+
+        $stmt->execute(array(
+            'username' => $user->getUsername(),
+            'password' => $user->getPassword(),
+            'is_Admin' => $user->getIsAdmin())
+        );
+    }
 }
