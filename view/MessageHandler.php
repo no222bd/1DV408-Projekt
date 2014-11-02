@@ -4,18 +4,18 @@ namespace view;
 
 class MessageHandler {
 
-    private static $message = 'message';
+    private static $MESSAGE = 'message';
 
     public function hasMessage() {
-        return !empty($_COOKIE[self::$message]);
+        return !empty($_COOKIE[self::$MESSAGE]);
     }
 
     public function setMessage($message) {
-        setcookie(self::$message, $message, 0);
+        setcookie(self::$MESSAGE, $message, 0);
     }
 
     public function getMessage() {
-        $output = $_COOKIE[self::$message];
+        $output = $_COOKIE[self::$MESSAGE];
 
         $this->removeMessage();
 
@@ -23,6 +23,6 @@ class MessageHandler {
     }
 
     public function removeMessage() {
-        setcookie(self::$message, '', time() - 1);
+        setcookie(self::$MESSAGE, '', time() - 1);
     }
 }

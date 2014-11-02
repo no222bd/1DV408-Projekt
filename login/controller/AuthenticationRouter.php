@@ -1,16 +1,16 @@
-<?php
+// <?php
 
-namespace login\controller;
+// namespace login\controller;
 
-require_once('login/controller/Register.php');
-require_once('login/controller/LoginController.php');
+// require_once('login/controller/Register.php');
+// require_once('login/controller/LoginController.php');
 
-class AuthenticationRouter {
+// class AuthenticationRouter {
 
-	public function authenticationRouter() {
-		if(\view\QuizzyMaster::doRegister())
-			return (new \login\controller\Register())->doRegister();
-		else
-			return (new \login\controller\LoginController())->doLogin();
-	}
-}
+	// public function authenticationRouter() {
+		// if(\view\QuizzyMaster::doRegister())
+			// return (new \login\controller\Register())->doRegister();
+		// else
+			// return (new \login\controller\LoginController())->doLogin();
+	// }
+// }

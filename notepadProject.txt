@@ -1,24 +1,5 @@
 <NotepadPlus>
     <Project name="Quizzy">
-        <Folder name=".idea">
-            <Folder name="dictionaries">
-                <File name=".idea\dictionaries\Nils.xml" />
-            </Folder>
-            <Folder name="inspectionProfiles">
-                <File name=".idea\inspectionProfiles\profiles_settings.xml" />
-                <File name=".idea\inspectionProfiles\Project_Default.xml" />
-            </Folder>
-            <Folder name="scopes">
-                <File name=".idea\scopes\scope_settings.xml" />
-            </Folder>
-            <File name=".idea\.name" />
-            <File name=".idea\1DV408-Projekt.iml" />
-            <File name=".idea\encodings.xml" />
-            <File name=".idea\misc.xml" />
-            <File name=".idea\modules.xml" />
-            <File name=".idea\vcs.xml" />
-            <File name=".idea\workspace.xml" />
-        </Folder>
         <Folder name="controller">
             <File name="controller\Quiz.php" />
             <File name="controller\QuizzyMaster.php" />
@@ -58,15 +39,6 @@
             <File name="model\SuperDAL.php" />
             <File name="model\User.php" />
             <File name="model\UserDAL.php" />
-        </Folder>
-        <Folder name="nbproject">
-            <Folder name="private">
-                <File name="nbproject\private\config.properties" />
-                <File name="nbproject\private\private.properties" />
-                <File name="nbproject\private\private.xml" />
-            </Folder>
-            <File name="nbproject\project.properties" />
-            <File name="nbproject\project.xml" />
         </Folder>
         <Folder name="style">
             <File name="style\cikonss.css" />
