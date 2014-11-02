@@ -12,6 +12,21 @@ class Quiz {
         $this->messageHandler = new \view\MessageHandler();
     }
 
+    public function redirectToUser($action, $id) {
+        header('location: ' . \Settings::$ROOT . '?' . \view\QuizzyMaster::$ACTION . '=' . $action . '&'
+                            . \view\QuizzyMaster::$USER_ID . '=' . $id);
+    }
+
+    public function redirectToQuiz($action, $id) {
+        header('location: ' . \Settings::$ROOT . '?' . \view\QuizzyMaster::$ACTION . '=' . $action . '&'
+                            . \view\QuizzyMaster::$QUIZ_ID . '=' . $id);
+    }
+
+    public function redirect($action) {
+        header('location: ' . \Settings::$ROOT . '?' . \view\QuizzyMaster::$ACTION . '=' . $action);
+    }
+
+
     public function getQuizId() {
         if (!empty($_GET[\view\QuizzyMaster::$QUIZ_ID]))
             return $_GET[\view\QuizzyMaster::$QUIZ_ID];
@@ -53,7 +68,7 @@ class Quiz {
     }
 
     public function getHTML(\model\Question $question, $numberOfQuestions, $quizName, $questionNumber) {
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>' . $quizName . '</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>' . $quizName . '</h2>';
 
         $html .= '<div id="questionBox">'
                 . (new \view\Question())->getHTML($question) .
@@ -101,7 +116,7 @@ class Quiz {
     }
 
     public function getTitleFormHTML() {
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Skapa Quiz</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Skapa Quiz</h2>';
 
         $html .= '<p> Ange Quiz-namn </p>';
 
@@ -117,7 +132,7 @@ class Quiz {
 
     public function getQuestionFormHTML($questionNumber, $showDoneButton = false) {
 
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Skapa fråga ' . $questionNumber . '</h2>
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Skapa fråga ' . $questionNumber . '</h2>
 				<form method="POST" enctype="multipart/form-data">
 					<label> Ange fråga
 						<input type="text" name="question" required />
@@ -162,7 +177,7 @@ class Quiz {
 
     public function getAdminQuizListHTML($quizes) {
 
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Mina Quiz</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Mina Quiz</h2>';
 
         if ($this->messageHandler->hasMessage())
             $html .= '<p>' . $this->messageHandler->getMessage() . '</p>';
@@ -181,14 +196,14 @@ class Quiz {
         foreach ($quizes as $quiz) {
 
             $html .= '<tr>
-                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_QUIZ_STATS . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+                        <td class="left"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$QUIZ_STATS . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
 					    <td class="center">' . count($quiz->getQuestions()) . '</td>
-                        <td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_CREATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">+</a></td>';
+                        <td class="center"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$CREATE_QUIZ . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">+</a></td>';
 
             if ($quiz->getIsActive())
-                $html .= '<td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Inaktivera</a></td>';
+                $html .= '<td class="center"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$DEACTIVATE_QUIZ . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">Inaktivera</a></td>';
             elseif(count($quiz->getQuestions()) > 2)    // Strängberoende
-                $html .= '<td class="center"><a href="?action=' . \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ . '&quiz=' . $quiz->getQuizId() . '">Aktivera</a></td>';
+                $html .= '<td class="center"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$ACTIVATE_QUIZ . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">Aktivera</a></td>';
 
             $html .= '</tr>';
         }
@@ -203,7 +218,7 @@ class Quiz {
 
     public function getQuizStatisticsHTML($quiz, $resultArray) {
         
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Quiz Statistik - ' . $quiz->getQuizname() . '</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Quiz Statistik - ' . $quiz->getQuizname() . '</h2>';
 
         $html .= '<h3>Antal frågor: ' . count($quiz->getQuestions()) . '</h3>';
 
@@ -237,7 +252,7 @@ class Quiz {
 
     public function getUserStatisticsHTML($user, $userResultArray) {
 
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Statistik - ' . $user->getUsername() . '</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Statistik - ' . $user->getUsername() . '</h2>';
 
         $html .= '<h3>Antal quiz: ' . count($userResultArray) . '</h3>';
 
@@ -270,7 +285,7 @@ class Quiz {
 
     public function getAvalibleQuizListHTML($quizes) {
 
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Tillgängliga Quiz</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Tillgängliga Quiz</h2>';
 
         $html .= '<table class="listtable">
                       <thead>
@@ -283,7 +298,7 @@ class Quiz {
 
         foreach ($quizes as $quiz) {
             $html .= '<tr>
-                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_DO_QUIZ . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+                        <td class="left"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$DO_QUIZ . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
                         <td class="center">' . count($quiz->getQuestions()) . '</td>
                       </tr>';
         }
@@ -314,7 +329,7 @@ class Quiz {
         foreach ($quizes as $quiz) {
 
             $html .= '<tr>
-                        <td class="left"><a href="?action=' . \view\QuizzyMaster::$PATH_SHOW_RESULT . '&quiz=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
+                        <td class="left"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$SHOW_RESULT . '&' . \view\QuizzyMaster::$QUIZ_ID . '=' . $quiz->getQuizId() . '">' . $quiz->getQuizName() . '</a></td>
                         <td class="center">' . $quizDAL->getQuizResult($quiz->getQuizId(), $userId) . ' av ' . count($quiz->getQuestions()) . '</td>
                       </tr>';
         }
@@ -329,7 +344,7 @@ class Quiz {
     // PARAMETERTEST
     public function getQuizResultHTML($quiz, $userAnswers, $result) {
 
-        $html = '<h3><a href="' . \Settings::$ROOT_PATH . '">Meny</a></h3><h2>Resultat - ' . $quiz->getQuizName() . '</h2>';
+        $html = '<h3><a href="' . \Settings::$ROOT . '">Meny</a></h3><h2>Resultat - ' . $quiz->getQuizName() . '</h2>';
 
         $html .= '<p>Antal rätt: ' . $result . ' / ' . count($quiz->getQuestions()) . '</p>';
 

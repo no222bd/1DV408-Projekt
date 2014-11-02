@@ -32,9 +32,9 @@ class User {
         foreach ($users as $user) {
 
             $html .= '<tr>
-                        <td class="left"><a href="' . \view\QuizzyMaster::$ACTION . \view\QuizzyMaster::$PATH_USER_STATS . \view\QuizzyMaster::$USER . $user->getUserId() . '">' . $user->getUsername() . '</a></td>
-                        <td class="center"><a href="' . \view\QuizzyMaster::$ACTION . \view\QuizzyMaster::$PATH_DELETE_USER . \view\QuizzyMaster::$USER . $user->getUserId() . '">-</a></td>
-                        <td class="center"><a href="' . \view\QuizzyMaster::$ACTION . \view\QuizzyMaster::$PATH_MAKEADMIN . \view\QuizzyMaster::$USER . $user->getUserId() . '">+</a></td>
+                        <td class="left"><a href="?' . \view\QuizzyMaster::$ACTION . '=' .  \view\QuizzyMaster::$USER_STATS . '&' . \view\QuizzyMaster::$USER_ID . '=' . $user->getUserId() . '">' . $user->getUsername() . '</a></td>
+                        <td class="center"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$DELETE_USER . '&' . \view\QuizzyMaster::$USER_ID . '=' . $user->getUserId() . '">-</a></td>
+                        <td class="center"><a href="?' . \view\QuizzyMaster::$ACTION . '=' . \view\QuizzyMaster::$MAKEADMIN . '&' . \view\QuizzyMaster::$USER_ID . '=' . $user->getUserId() . '">+</a></td>
                       </tr>';
         }
 

@@ -52,13 +52,11 @@ abstract class SuperDAL {
     protected static $usernameField = 'username';
     protected static $passwordField = 'password';
     protected static $isAdminField = 'isAdmin';
-
-
 	
 	protected function connectToDB() {
 		
 		if ($this->dbConnection == NULL)
-			$this->dbConnection = new \PDO(\Settings::$dbConnectionString, \Settings::$dbUsername, \Settings::$dbPassword);
+			$this->dbConnection = new \PDO(\Settings::$DB_CONNECTIONSTRING, \Settings::$DB_USERNAME, \Settings::$DB_PASSWORD);
 		
 		//$this->dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		

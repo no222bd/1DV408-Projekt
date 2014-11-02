@@ -22,13 +22,13 @@ class User {
         if ($_GET['action'] == 'deleteuser') {
             $userDAL->deleteUserById($_GET['user']);
             $this->messageHandler->setMessage('Användare borttagen');
-            header('location: ' . \Settings::$ROOT_PATH . '?action=manageuser');
+            header('location: ' . \Settings::$ROOT . '?action=manageuser');
         }
 
         if ($_GET['action'] == 'makeadmin') {
             $userDAL->makeAdminById($_GET['user']);
             $this->messageHandler->setMessage('Användare fått administratörsrättigheter');
-            header('location: ' . \Settings::$ROOT_PATH . '?action=manageuser');
+            header('location: ' . \Settings::$ROOT . '?action=manageuser');
         }
 
         $users = $userDAL->getUsersOnly();

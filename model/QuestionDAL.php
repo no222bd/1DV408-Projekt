@@ -12,7 +12,6 @@ class QuestionDAL extends \model\SuperDAL {
 	protected static $userAnswer_answerIdField = 'answerId';
 
 	
-///// todo
 	public function saveUserAnswer($doneQuizId, $answerId) {
 
 		$this->connectToDB();
@@ -27,11 +26,6 @@ class QuestionDAL extends \model\SuperDAL {
 			'answer_Id' => $answerId)
 		);
 	}
-
-
-
-
-
 
 	public function getAnswerIdByQuestionIdAndAnswer($questionId, $answer) {
 
@@ -51,13 +45,6 @@ class QuestionDAL extends \model\SuperDAL {
 
 		return $answerId[0];
 	}
-
-	
-
-
-
-
-	
 
 	public function populateQuizObject($quiz) {
 

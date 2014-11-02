@@ -5,31 +5,29 @@ namespace view;
 class QuizzyMaster {
 
     // Admin
-    public static $PATH_MANAGE_USER = 'manageuser';
-    public static $PATH_DELETE_USER = 'deleteuser';
-    public static $PATH_MAKEADMIN = 'makeadmin';
-    public static $PATH_MANAGE_QUIZ = 'managequiz';
-    public static $PATH_CREATE_QUIZ = 'createquiz';
-    public static $PATH_DELETE_QUIZ = 'deletequiz';
-    public static $PATH_DEACTIVATE_QUIZ = 'deactivatequiz';
-    public static $PATH_ACTIVATE_QUIZ = 'activatequiz';
-    public static $PATH_QUIZ_STATS = 'quizstats';
-    public static $PATH_USER_STATS = 'userstats';
+    public static $MANAGE_USER = 'manageuser';
+    public static $DELETE_USER = 'deleteuser';
+    public static $MAKEADMIN = 'makeadmin';
+    public static $MANAGE_QUIZ = 'managequiz';
+    public static $CREATE_QUIZ = 'createquiz';
+    public static $DELETE_QUIZ = 'deletequiz';
+    public static $DEACTIVATE_QUIZ = 'deactivatequiz';
+    public static $ACTIVATE_QUIZ = 'activatequiz';
+    public static $QUIZ_STATS = 'quizstats';
+    public static $USER_STATS = 'userstats';
     
     // User 
-    public static $PATH_DO_QUIZ = 'doquiz';
-    public static $PATH_LIST_AVALIBLE = 'avaliblequiz';
-    public static $PATH_LIST_DONE = 'donequiz';
-    public static $PATH_SHOW_RESULT = 'showresult';
+    public static $DO_QUIZ = 'doquiz';
+    public static $LIST_AVALIBLE = 'avaliblequiz';
+    public static $LIST_DONE = 'donequiz';
+    public static $SHOW_RESULT = 'showresult';
     
     // Övriga
-    public static $ACTION = '?action=';
-    public static $USER = '&user=';
-    public static $QUIZ = '&quiz=';
-    // public static $USER_ID = 'user';
-    // public static $QUIZ_ID = 'quiz';
-    public static $PATH_REGISTER = 'register';
-    public static $PATH_HOME = 'home';
+    public static $ACTION = 'action';
+    public static $USER_ID = 'userId';
+    public static $QUIZ_ID = 'quizId';
+    public static $REGISTER = 'register';
+    public static $HOME = 'home';
 
     private $user;
 
@@ -39,67 +37,67 @@ class QuizzyMaster {
 
     public static function getAction() {
 
-        if (isset($_GET['action'])) {
+        if (isset($_GET[self::$ACTION])) {
 
-            switch ($_GET['action']) {
+            switch ($_GET[self::$ACTION]) {
 
-                case self::$PATH_MANAGE_USER:
-                    return self::$PATH_MANAGE_USER;
+                case self::$MANAGE_USER:
+                    return self::$MANAGE_USER;
                     break;
-                case self::$PATH_DELETE_USER:
-                    return self::$PATH_DELETE_USER;
+                case self::$DELETE_USER:
+                    return self::$DELETE_USER;
                     break;
-                case self::$PATH_MAKEADMIN:
-                    return self::$PATH_MAKEADMIN;
+                case self::$MAKEADMIN:
+                    return self::$MAKEADMIN;
                     break;
-                case self::$PATH_MANAGE_QUIZ:
-                    return self::$PATH_MANAGE_QUIZ;
+                case self::$MANAGE_QUIZ:
+                    return self::$MANAGE_QUIZ;
                     break;
-                case self::$PATH_CREATE_QUIZ:
-                    return self::$PATH_CREATE_QUIZ;
+                case self::$CREATE_QUIZ:
+                    return self::$CREATE_QUIZ;
                     break;
-                case self::$PATH_DEACTIVATE_QUIZ:
-                    return self::$PATH_DEACTIVATE_QUIZ;
+                case self::$DEACTIVATE_QUIZ:
+                    return self::$DEACTIVATE_QUIZ;
                     break;
-                case self::$PATH_ACTIVATE_QUIZ:
-                    return self::$PATH_ACTIVATE_QUIZ;
+                case self::$ACTIVATE_QUIZ:
+                    return self::$ACTIVATE_QUIZ;
                     break;
-                case self::$PATH_QUIZ_STATS:
-                    return self::$PATH_QUIZ_STATS;
+                case self::$QUIZ_STATS:
+                    return self::$QUIZ_STATS;
                     break;
-                case self::$PATH_USER_STATS:
-                    return self::$PATH_USER_STATS;
+                case self::$USER_STATS:
+                    return self::$USER_STATS;
                     break;
-                case self::$PATH_REGISTER:
-                    return self::$PATH_REGISTER;
+                case self::$REGISTER:
+                    return self::$REGISTER;
                     break;
-                case self::$PATH_LIST_AVALIBLE:
-                    return self::$PATH_LIST_AVALIBLE;
+                case self::$LIST_AVALIBLE:
+                    return self::$LIST_AVALIBLE;
                     break;
-                case self::$PATH_LIST_DONE:
-                    return self::$PATH_LIST_DONE;
+                case self::$LIST_DONE:
+                    return self::$LIST_DONE;
                     break;
-                case self::$PATH_SHOW_RESULT:
-                    return self::$PATH_SHOW_RESULT;
+                case self::$SHOW_RESULT:
+                    return self::$SHOW_RESULT;
                     break;
-                case self::$PATH_DO_QUIZ:
-                    return self::$PATH_DO_QUIZ;
+                case self::$DO_QUIZ:
+                    return self::$DO_QUIZ;
                     break;
-                default:
-                    return self::$PATH_HOME;
-                    break;
+                // default:
+                //     return self::$HOME;
+                //     break;
             }
         } else
-            return self::$PATH_HOME;
+            return self::$HOME;
     }
 
     public function getAdminHTML() {
 
         $html = '<h2>Välkommen ' . $this->user->getUsername() . '</h2>
                  
-                 <a href="?action=' . self::$PATH_CREATE_QUIZ . '">Skapa quiz</a><br/>
-                 <a href="?action=' . self::$PATH_MANAGE_QUIZ . '">Quizlista</a><br/>
-                 <a href="?action=' . self::$PATH_MANAGE_USER . '">Användarlista</a><br/>'
+                 <a href="?' . self::$ACTION . '=' . self::$CREATE_QUIZ . '">Skapa quiz</a><br/>
+                 <a href="?' . self::$ACTION . '=' . self::$MANAGE_QUIZ . '">Quizlista</a><br/>
+                 <a href="?' . self::$ACTION . '=' . self::$MANAGE_USER . '">Användarlista</a><br/>'
 
                  . $this->getLogoutButtonHTML();
 
@@ -110,8 +108,8 @@ class QuizzyMaster {
 
         $html = '<h2>Välkommen ' . $this->user->getUsername() . '</h2>
                  
-                 <a href="?action=' . self::$PATH_LIST_AVALIBLE . '">Tillgängliga quiz</a><br/>
-                 <a href="?action=' . self::$PATH_LIST_DONE . '">Gjorda quiz</a><br/>'
+                 <a href="?' . self::$ACTION . '=' . self::$LIST_AVALIBLE . '">Tillgängliga quiz</a><br/>
+                 <a href="?' . self::$ACTION . '=' . self::$LIST_DONE . '">Gjorda quiz</a><br/>'
 
                  . $this->getLogoutButtonHTML();
 

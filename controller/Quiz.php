@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once('model/Question.php');
-require_once('model/SessionHandler.php');
+require_once('view/MessageHandler.php');
 require_once('view/Quiz.php');
 //TEMP
 require_once('model/QuizDAL.php');
@@ -19,7 +19,7 @@ class Quiz {
     public function __construct(\model\User $user) {
         $this->user = $user;
         $this->view = new \view\Quiz();
-        $this->session = new \model\SessionHandler();
+        //$this->session = new \model\SessionHandler();
         $this->messageHandler = new \view\MessageHandler();
     }
 
@@ -61,7 +61,8 @@ class Quiz {
         if ($_GET['action'] == 'activatequiz' || $_GET['action'] == 'deactivatequiz') {
             $quizDAL->toogleQuizActivation($_GET['quiz']);
             $this->messageHandler->setMessage('Quiz-statusen är ändrad');
-            header('location: ' . \Settings::$ROOT_PATH . '?action=managequiz');
+            //header('location: ' . \Settings::$ROOT . '?action=managequiz');
+            $this->view->redirect(\view\QuizzyMaster::$MANAGE_QUIZ);
         }
 
         $quizes = $quizDAL->getAdminQuizes($this->user->getUserId());
@@ -131,7 +132,11 @@ class Quiz {
                 $quizDAL = new \model\QuizDAL();
                 $quizId = $quizDAL->saveQuiz($quiz);
 
-                header('location: '. \Settings::$ROOT_PATH . '?action=createquiz&quiz=' . $quizId);
+                //header('location: '. \Settings::$ROOT . '?action=createquiz&quiz=' . $quizId);
+
+                //var_dump($quizId); die();
+
+                $this->view->redirectToQuiz(\view\QuizzyMaster::$CREATE_QUIZ, $quizId);
             }
         } elseif ($this->view->getQuestion()) { //!empty($this->view->getQuestion())
 
@@ -169,14 +174,16 @@ class Quiz {
                 $questionDAL = new \model\QuestionDAL();
                 $questionDAL->saveQuestionByQuizId($questionObject, $quizId);
 
-                header('location: ' . \Settings::$ROOT_PATH . '?action=createquiz&quiz=' . $quizId);
+                //header('location: ' . \Settings::$ROOT . '?action=createquiz&quiz=' . $quizId);
+                $this->view->redirectToQuiz(\view\QuizzyMaster::$CREATE_QUIZ, $quizId);
             }
         }
 
         $questionNumber = count((new \model\QuizDAL())->getQuizById($quizId)->getQuestions()) + 1;
 
         if ($this->view->isLastQuestion()) {
-            header('location: ' . \Settings::$ROOT_PATH . '?action=' . \view\QuizzyMaster::$PATH_MANAGE_QUIZ);
+            //header('location: ' . \Settings::$ROOT . '?action=' . \view\QuizzyMaster::$PATH_MANAGE_QUIZ);
+            $this->view->redirect(\view\QuizzyMaster::$MANAGE_QUIZ);
         } elseif ($questionNumber > 2)
             return $this->view->getQuestionFormHTML($questionNumber, $showDoneButton = true);
         else
@@ -229,7 +236,8 @@ class Quiz {
 
         $quizDAL->updateDoneQuizIsComplete($doneQuizId);
 
-        header('location: '. \Settings::$ROOT_PATH . '?action=' . \view\QuizzyMaster::$PATH_SHOW_RESULT . '&quiz=' . $quiz->getQuizId());
+        //header('location: '. \Settings::$ROOT . '?action=' . \view\QuizzyMaster::$SHOW_RESULT . '&quiz=' . $quiz->getQuizId());
+        $this->view->redirectToQuiz(\view\QuizzyMaster::$SHOW_RESULT, $quiz->getQuizId());
     }
     
     private function getImagePath(){

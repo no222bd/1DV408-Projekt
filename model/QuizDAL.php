@@ -8,46 +8,6 @@ require_once('model/QuestionDAL.php');
 
 class QuizDAL extends \model\SuperDAL {
 
-// Answer table properties
-    // protected static $answer_tableName = 'answer';
-    // protected static $answer_idField = 'answerId';
-    // protected static $answer_questionIdField = 'questionId';
-    // protected static $answer_answerField = 'answer';
-    // protected static $answer_isCorrectField = 'isCorrect';
-
-    // // UserAnswer table properties
-    // protected static $userAnswer_tableName = 'useranswer';
-    // protected static $userAnswer_idField = 'userAnswerId';
-    // protected static $userAnswer_doneQuizIdField = 'doneQuizId';
-    // protected static $userAnswer_answerIdField = 'answerId';
-
-    // // DoneQuiz table properties
-    // protected static $done_tableName = 'donequiz';
-    // protected static $done_doneQuizIdField = 'doneQuizId';
-    // protected static $done_userIdField = 'userId';
-    // protected static $done_quizIdField = 'quizId';
-    // protected static $done_isCompleteField = 'isComplete';
-   
-    // User table properties
-    // private static $tableName = 'user';
-    // private static $userIdField = 'userId';
-    // private static $usernameField = 'username';
-    // private static $passwordField = 'password';
-    // private static $isAdminField = 'isAdmin';
-
-    // Quiz table properties
-    // protected static $quiz_tableName = 'quiz';
-    // protected static $quiz_idField = 'quizId';
-    // protected static $quiz_nameField = 'name';
-    // protected static $quiz_creatorIdField = 'creatorId';
-    // protected static $quiz_isActiveField = 'isActive';
-
-    // // Question table properties
-    // protected static $question_tableName = 'question';
-    // protected static $question_idField = 'questionId';
-    // protected static $question_quizIdField = 'quizId';
-    // protected static $question_questionField = 'question';
-
     public function getUserResultArray($userId) {
 
         $this->connectToDB();

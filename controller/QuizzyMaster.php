@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once('view/QuizzyMaster.php');
-// require_once('controller/Quiz.php');
+require_once('controller/Quiz.php');
 // require_once('controller/User.php');
 require_once('login/controller/LoginController.php');
 require_once('login/controller/Register.php'); 
@@ -36,34 +36,34 @@ class QuizzyMaster {
 
 				switch (\view\QuizzyMaster::getAction()) {
 
-					case \view\QuizzyMaster::$PATH_MANAGE_USER:
+					case \view\QuizzyMaster::$MANAGE_USER:
 						return (new \controller\User())->manageUser();
 						break;
-					case \view\QuizzyMaster::$PATH_DELETE_USER:
+					case \view\QuizzyMaster::$DELETE_USER:
 						return (new \controller\User())->manageUser();
 						break;		
-					case \view\QuizzyMaster::$PATH_MAKEADMIN:
+					case \view\QuizzyMaster::$MAKEADMIN:
 						return (new \controller\User())->manageUser();
 						break;
-					case \view\QuizzyMaster::$PATH_MANAGE_QUIZ:
+					case \view\QuizzyMaster::$MANAGE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;
-					case \view\QuizzyMaster::$PATH_DELETE_QUIZ:
+					case \view\QuizzyMaster::$DELETE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;	
-					case \view\QuizzyMaster::$PATH_CREATE_QUIZ:
+					case \view\QuizzyMaster::$CREATE_QUIZ:
 						return (new \controller\Quiz($user))->createQuiz();
 						break;
-					case \view\QuizzyMaster::$PATH_ACTIVATE_QUIZ:
+					case \view\QuizzyMaster::$ACTIVATE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;	
-					case \view\QuizzyMaster::$PATH_DEACTIVATE_QUIZ:
+					case \view\QuizzyMaster::$DEACTIVATE_QUIZ:
 						return (new \controller\Quiz($user))->manageQuiz();
 						break;
-					case \view\QuizzyMaster::$PATH_QUIZ_STATS:
+					case \view\QuizzyMaster::$QUIZ_STATS:
 						return (new \controller\Quiz($user))->showQuizStatistics();
 						break;	
-					case \view\QuizzyMaster::$PATH_USER_STATS:
+					case \view\QuizzyMaster::$USER_STATS:
 						return (new \controller\Quiz($user))->showUserStatistics();
 						break;
 					// case \view\QuizzyMaster::$PATH_HOME:
@@ -80,23 +80,23 @@ class QuizzyMaster {
 
 				switch (\view\QuizzyMaster::getAction()) {
 					
-					case \view\QuizzyMaster::$PATH_LIST_AVALIBLE:
+					case \view\QuizzyMaster::$LIST_AVALIBLE:
 						return (new \controller\Quiz($user))->listAvalibleQuiz();
 						break;
-					case \view\QuizzyMaster::$PATH_LIST_DONE:
+					case \view\QuizzyMaster::$LIST_DONE:
 						return (new \controller\Quiz($user))->listDoneQuiz();
 						break;
-					case \view\QuizzyMaster::$PATH_SHOW_RESULT:
+					case \view\QuizzyMaster::$SHOW_RESULT:
 						return (new \controller\Quiz($user))->showQuizResult();
 						break;
 
-					case \view\QuizzyMaster::$PATH_DO_QUIZ:
+					case \view\QuizzyMaster::$DO_QUIZ:
 						return (new \controller\Quiz($user))->doQuiz();
 						break;
-					// case \view\QuizzyMaster::$PATH_LIST:
+					// case \view\QuizzyMaster::$LIST:
 					// 	return (new \controller\Quiz())->listQuizes();
 					// 	break;
-					// case \view\QuizzyMaster::$PATH_HOME:
+					// case \view\QuizzyMaster::$HOME:
 					// 	return  $this->view->getUserHTML();
 					// 	break;
 					default:
@@ -107,7 +107,7 @@ class QuizzyMaster {
 		}
 
 		// Kolla och visa Login eller Registration formulär
-		if(\view\QuizzyMaster::getAction() == \view\QuizzyMaster::$PATH_REGISTER) {
+		if(\view\QuizzyMaster::getAction() == \view\QuizzyMaster::$REGISTER) {
 			return (new \login\controller\Register())->doRegister();
 		}
 		else {
